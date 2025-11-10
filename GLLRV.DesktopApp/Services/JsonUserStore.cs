@@ -21,10 +21,64 @@ namespace GLLRV.DesktopApp.Services
                 Directory.CreateDirectory(dataDir);
 
             _filePath = Path.Combine(dataDir, "usuarios.json");
-            EnsureSeedUser();
         }
 
-        private List<Usuario> LoadAll()
+        public static void EnsureSeedUser()
+        {
+            var store = new JsonUserStore();
+            var usuarios = store.LoadAllInternal();
+
+            if (usuarios.Any())
+                return;
+
+            var usuarioPadrao = new Usuario
+            {
+                Username = "vinicius",
+                NomeCompleto = "Vinicius Bittencourt",
+                Nivel = "Nível 2",
+                Categoria = "Servidores / Rede",
+                PasswordHash = HashPassword("admin"),
+                PrimeiroAcesso = true,
+                Ativo = true
+            };
+
+            usuarios.Add(usuarioPadrao);
+            store.SaveAllInternal(usuarios);
+        }
+
+        public Usuario GetByUsername(string username)
+        {
+            return LoadAllInternal()
+                .FirstOrDefault(u =>
+                    u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void Update(Usuario usuario)
+        {
+            var usuarios = LoadAllInternal();
+            var existing = usuarios.FirstOrDefault(u =>
+                u.Username.Equals(usuario.Username, StringComparison.OrdinalIgnoreCase));
+
+            if (existing == null)
+            {
+                usuarios.Add(usuario);
+            }
+            else
+            {
+                existing.NomeCompleto = usuario.NomeCompleto;
+                existing.Nivel = usuario.Nivel;
+                existing.Categoria = usuario.Categoria;
+                existing.PasswordHash = usuario.PasswordHash;
+                existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
+                existing.Ativo = usuario.Ativo;
+            }
+
+            SaveAllInternal(usuarios);
+        }
+
+        #region helpers
+
+        private List<Usuario> LoadAllInternal()
         {
             if (!File.Exists(_filePath))
                 return new List<Usuario>();
@@ -33,91 +87,25 @@ namespace GLLRV.DesktopApp.Services
             if (string.IsNullOrWhiteSpace(json))
                 return new List<Usuario>();
 
-            try
-            {
-                var list = JsonSerializer.Deserialize<List<Usuario>>(json);
-                return list ?? new List<Usuario>();
-            }
-            catch
-            {
-                return new List<Usuario>();
-            }
+            return JsonSerializer.Deserialize<List<Usuario>>(json)
+                   ?? new List<Usuario>();
         }
 
-        private void SaveAll(List<Usuario> usuarios)
+        private void SaveAllInternal(List<Usuario> usuarios)
         {
-            var json = JsonSerializer.Serialize(usuarios, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var json = JsonSerializer.Serialize(usuarios,
+                new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filePath, json);
         }
 
-        public Usuario? GetByUsername(string username)
+        public static string HashPassword(string password)
         {
-            if (string.IsNullOrWhiteSpace(username))
-                return null;
-
-            var usuarios = LoadAll();
-            return usuarios
-                .FirstOrDefault(u =>
-                    string.Equals(u.NomeUsuario, username, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void Update(Usuario usuario)
-        {
-            var usuarios = LoadAll();
-
-            var existing = usuarios.FirstOrDefault(u =>
-                string.Equals(u.NomeUsuario, usuario.NomeUsuario, StringComparison.OrdinalIgnoreCase));
-
-            if (existing != null)
-            {
-                existing.NomeCompleto = usuario.NomeCompleto;
-                existing.SenhaHash = usuario.SenhaHash;
-                existing.FraseSeguranca = usuario.FraseSeguranca;
-                existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
-                existing.Nivel = usuario.Nivel;
-                existing.Categoria = usuario.Categoria;
-            }
-            else
-            {
-                usuarios.Add(usuario);
-            }
-
-            SaveAll(usuarios);
-        }
-
-        public static string GerarHash(string texto)
-        {
-            if (string.IsNullOrEmpty(texto))
-                return string.Empty;
-
             using var sha = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(texto);
+            var bytes = Encoding.UTF8.GetBytes(password);
             var hash = sha.ComputeHash(bytes);
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
 
-        public void EnsureSeedUser()
-        {
-            var usuarios = LoadAll();
-            if (usuarios.Any())
-                return;
-
-            var admin = new Usuario
-            {
-                NomeUsuario = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                SenhaHash = GerarHash("123456"),
-                FraseSeguranca = "meu primeiro acesso",
-                PrimeiroAcesso = true,
-                Nivel = "Nível 2",
-                Categoria = "Servidores e Gerenciamento de Rede"
-            };
-
-            usuarios.Add(admin);
-            SaveAll(usuarios);
-        }
+        #endregion
     }
 }

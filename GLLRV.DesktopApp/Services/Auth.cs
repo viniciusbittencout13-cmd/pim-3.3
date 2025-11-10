@@ -6,6 +6,7 @@ namespace GLLRV.DesktopApp.Services
     {
         private readonly JsonUserStore _store = new JsonUserStore();
 
+        // Método principal de autenticação
         public Usuario Autenticar(string username, string password, out string mensagemErro)
         {
             mensagemErro = null;
@@ -27,7 +28,23 @@ namespace GLLRV.DesktopApp.Services
             return user;
         }
 
-        // Se em algum lugar chamar Login, deixa como alias:
+        // Alias compatível (sem mensagemErro)
+        public Usuario Autenticar(string username, string password)
+        {
+            string erro;
+            return Autenticar(username, password, out erro);
+        }
+
+        // Atualiza o status de primeiro acesso (usado ao trocar a senha)
+        public void AtualizarPrimeiroAcesso(Usuario usuario)
+        {
+            if (usuario == null) return;
+
+            usuario.PrimeiroAcesso = false;
+            _store.Update(usuario);
+        }
+
+        // Método compatível com código legado
         public Usuario Login(string username, string password, out string mensagemErro)
             => Autenticar(username, password, out mensagemErro);
     }

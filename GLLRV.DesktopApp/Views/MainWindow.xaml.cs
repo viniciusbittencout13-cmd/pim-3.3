@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using GLLRV.DesktopApp.Models;
 using GLLRV.DesktopApp.Views.Pages;
@@ -13,40 +14,43 @@ namespace GLLRV.DesktopApp.Views
         public MainWindow(Usuario usuario)
         {
             InitializeComponent();
-            _usuario = usuario;
+
+            _usuario = usuario ?? new Usuario
+            {
+                NomeUsuario = "vinicius",
+                NomeCompleto = "Vinicius Bittencourt",
+                Nivel = "Nível 2",
+                Categoria = "Servidores e Gerenciamento de Rede",
+                PrimeiroAcesso = false
+            };
+
             CarregarUsuarioNoTopo();
             IniciarRelogio();
             AbrirChamadosPendentes();
         }
 
         private void CarregarUsuarioNoTopo()
-{
-    if (_usuario == null) return;
+        {
+            UserNameText.Text = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
+                ? _usuario.NomeUsuario
+                : _usuario.NomeCompleto;
 
-    UserNameText.Text = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "-";
-    UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel ?? "-"}";
-    UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria ?? "-"}";
+            UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel}";
+            UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria}";
 
-    var nome = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "";
-    var partes = nome.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var nomeBase = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
+                ? _usuario.NomeUsuario
+                : _usuario.NomeCompleto;
 
-    string iniciais;
+            var partes = (nomeBase ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string iniciais = "?";
+            if (partes.Length >= 2)
+                iniciais = $"{partes[0][0]}{partes[1][0]}";
+            else if (partes.Length == 1)
+                iniciais = partes[0][0].ToString();
 
-    if (partes.Length >= 2)
-    {
-        iniciais = $"{partes[0][0]}{partes[1][0]}";
-    }
-    else if (partes.Length == 1 && partes[0].Length > 0)
-    {
-        iniciais = partes[0][0].ToString();
-    }
-    else
-    {
-        iniciais = "?";
-    }
-
-    InitialsText.Text = iniciais.ToUpperInvariant();
-}
+            InitialsText.Text = iniciais.ToUpperInvariant();
+        }
 
         private void IniciarRelogio()
         {
@@ -54,31 +58,36 @@ namespace GLLRV.DesktopApp.Views
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
+
             timer.Tick += (_, _) =>
             {
-                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
+                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             };
+
             timer.Start();
         }
 
-        private void SetPage(object page)
+        private void SetContent(UserControl control)
         {
-            ContentHost.Content = page;
+            if (ContentHost == null)
+                return;
+
+            ContentHost.Content = control;
         }
 
         private void AbrirChamadosPendentes()
         {
-            SetPage(new ChamadosPendentesPage());
+            SetContent(new ChamadosPendentesPage());
         }
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
         {
-            SetPage(new UsuariosPage());
+            SetContent(new UsuariosPage());
         }
 
         private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
         {
-            SetPage(new RelatoriosPage());
+            SetContent(new RelatoriosPage());
         }
 
         private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
@@ -88,17 +97,17 @@ namespace GLLRV.DesktopApp.Views
 
         private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
         {
-            SetPage(new HistoricoChamadosPage());
+            SetContent(new HistoricoChamadosPage());
         }
 
         private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
         {
-            SetPage(new ChamadosAndamentoPage());
+            SetContent(new ChamadosAndamentoPage());
         }
 
         private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
         {
-            SetPage(new ConfiguracaoPage());
+            SetContent(new ConfiguracaoPage());
         }
 
         private void SairButton_Click(object sender, RoutedEventArgs e)

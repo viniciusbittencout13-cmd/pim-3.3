@@ -1,4 +1,4 @@
-<Page x:Class="GLLRV.DesktopApp.Views.Pages.HistoricoChamadosPage"
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.HistoricoChamadosPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Histórico de Chamados">
@@ -28,4 +28,4 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
-</Page>
+</UserControl>

@@ -1,0 +1,29 @@
+name: build-offline-win64
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Clean
+        run: dotnet clean ./GLLRV.DesktopApp/GLLRV.DesktopApp.csproj
+
+      - name: Publish self-contained
+        run: dotnet publish ./GLLRV.DesktopApp/GLLRV.DesktopApp.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true -o ./publish/win-x64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GLLRV_offline_win64
+          path: publish/win-x64

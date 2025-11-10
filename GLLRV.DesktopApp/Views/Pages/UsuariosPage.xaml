@@ -1,4 +1,4 @@
-<Page x:Class="GLLRV.DesktopApp.Views.Pages.UsuariosPage"
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.UsuariosPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Usuários">
@@ -9,4 +9,4 @@
                    HorizontalAlignment="Center"
                    FontSize="18"/>
     </Grid>
-</Page>
+</UserControl>

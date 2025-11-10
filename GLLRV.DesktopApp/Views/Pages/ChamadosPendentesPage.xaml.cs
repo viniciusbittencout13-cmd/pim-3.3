@@ -3,7 +3,7 @@ using GLLRV.DesktopApp.Services;
 
 namespace GLLRV.DesktopApp.Views.Pages
 {
-    public partial class ChamadosPendentesPage : Page
+    public partial class ChamadosPendentesPage : UserControl
     {
         public ChamadosPendentesPage()
         {

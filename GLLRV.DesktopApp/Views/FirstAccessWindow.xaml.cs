@@ -13,7 +13,7 @@ namespace GLLRV.DesktopApp.Views
         {
             InitializeComponent();
             _usuario = usuario;
-            UsernameText.Text = _usuario.NomeUsuario;
+            UsernameLabel.Content = _usuario.NomeUsuario;
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)

@@ -1,42 +1,36 @@
-using System.Security.Cryptography;
-using System.Text;
+using System;
 using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Services
 {
-    public static class Auth
+    public class Auth
     {
-        public static Usuario? UsuarioLogado { get; private set; }
+        private readonly JsonUserStore _store = new JsonUserStore();
 
-        public static string Sha256Hex(string input)
+        public Usuario? Autenticar(string username, string senha)
         {
-            using var sha = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(input);
-            var hash = sha.ComputeHash(bytes);
-            var sb = new StringBuilder(hash.Length * 2);
-            foreach (var b in hash)
-                sb.Append(b.ToString("x2"));
-            return sb.ToString();
-        }
-
-        public static Usuario? Login(string username, string plainPassword, JsonUserStore store)
-        {
-            var user = store.GetByUsername(username);
+            var user = _store.GetByUsername(username);
             if (user == null)
                 return null;
 
-            var hash = Sha256Hex(plainPassword);
-            if (!string.Equals(user.SenhaHash, hash, System.StringComparison.OrdinalIgnoreCase))
+            var hash = JsonUserStore.GerarHash(senha ?? string.Empty);
+            if (!string.Equals(user.SenhaHash, hash, StringComparison.OrdinalIgnoreCase))
                 return null;
 
-            UsuarioLogado = user;
             return user;
         }
 
-        public static void AtualizarUsuario(Usuario usuario, JsonUserStore store)
+        public bool AtualizarPrimeiroAcesso(Usuario usuario, string novaSenha, string fraseSeguranca)
         {
-            store.UpdateUsuario(usuario);
-            UsuarioLogado = usuario;
+            if (usuario == null)
+                return false;
+
+            usuario.SenhaHash = JsonUserStore.GerarHash(novaSenha);
+            usuario.FraseSeguranca = fraseSeguranca ?? string.Empty;
+            usuario.PrimeiroAcesso = false;
+
+            _store.Update(usuario);
+            return true;
         }
     }
 }

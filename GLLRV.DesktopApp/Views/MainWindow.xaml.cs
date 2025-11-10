@@ -20,24 +20,33 @@ namespace GLLRV.DesktopApp.Views
         }
 
         private void CarregarUsuarioNoTopo()
-        {
-            var nome = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
-                ? _usuario.NomeUsuario
-                : _usuario.NomeCompleto;
+{
+    if (_usuario == null) return;
 
-            UserNameText.Text = nome;
-            UserLevelText.Text = $"TÉCNICO: NÍVEL {_usuario.Nivel}";
-            UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria}";
+    UserNameText.Text = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "-";
+    UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel ?? "-"}";
+    UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria ?? "-"}";
 
-            var partes = (nome ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string iniciais = "?";
-            if (partes.Length >= 2)
-                iniciais = $"{partes[0][0]}{partes[1][0]}";
-            else if (partes.Length == 1)
-                iniciais = partes[0][0].ToString();
+    var nome = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "";
+    var partes = nome.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            InitialsText.Text = iniciais.ToUpperInvariant();
-        }
+    string iniciais;
+
+    if (partes.Length >= 2)
+    {
+        iniciais = $"{partes[0][0]}{partes[1][0]}";
+    }
+    else if (partes.Length == 1 && partes[0].Length > 0)
+    {
+        iniciais = partes[0][0].ToString();
+    }
+    else
+    {
+        iniciais = "?";
+    }
+
+    InitialsText.Text = iniciais.ToUpperInvariant();
+}
 
         private void IniciarRelogio()
         {

@@ -1,25 +1,13 @@
-using System.Text.Json.Serialization;
-
 namespace GLLRV.DesktopApp.Models
 {
     public class Usuario
     {
-        public string NomeUsuario { get; set; } = string.Empty;
-        public string NomeCompleto { get; set; } = string.Empty;
-
-        public string SenhaHash { get; set; } = string.Empty;
-        public string FraseSeguranca { get; set; } = string.Empty;
-        public bool PrimeiroAcesso { get; set; } = true;
-
-        public string Nivel { get; set; } = string.Empty;
-        public string Categoria { get; set; } = string.Empty;
-
-        // Compatibilidade com código antigo
-        [JsonIgnore]
-        public string Username
-        {
-            get => NomeUsuario;
-            set => NomeUsuario = value;
-        }
+        public string Username { get; set; }          // login
+        public string NomeCompleto { get; set; }      // nome exibido
+        public string Nivel { get; set; }             // Nível 1, 2...
+        public string Categoria { get; set; }         // área
+        public string PasswordHash { get; set; }      // senha (hash)
+        public bool PrimeiroAcesso { get; set; }      // força troca de senha
+        public bool Ativo { get; set; }               // se pode logar
     }
 }

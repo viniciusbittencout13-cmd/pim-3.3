@@ -3,7 +3,7 @@ using GLLRV.DesktopApp.Services;
 
 namespace GLLRV.DesktopApp.Views.Pages
 {
-    public partial class ChamadosAndamentoPage : Page
+    public partial class ChamadosAndamentoPage : UserControl
     {
         public ChamadosAndamentoPage()
         {

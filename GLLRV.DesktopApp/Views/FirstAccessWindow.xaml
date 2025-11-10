@@ -45,5 +45,9 @@
                 Foreground="White"
                 BorderThickness="0"
                 Cursor="Hand"/>
+
+        <Label x:Name="UsernameLabel"
+               Content="Usuário"
+               Visibility="Collapsed"/>
     </Grid>
 </Window>

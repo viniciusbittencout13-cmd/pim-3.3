@@ -1,5 +1,6 @@
 using System.Windows;
 using GLLRV.DesktopApp.Services;
+using GLLRV.DesktopApp.Views;
 
 namespace GLLRV.DesktopApp
 {
@@ -9,9 +10,10 @@ namespace GLLRV.DesktopApp
         {
             base.OnStartup(e);
 
-            // Garante um usuário padrão na primeira execução
-            var store = new JsonUserStore();
-            store.EnsureSeedUser();
+            JsonUserStore.EnsureSeedUser();
+
+            var login = new LoginWindow();
+            login.Show();
         }
     }
 }

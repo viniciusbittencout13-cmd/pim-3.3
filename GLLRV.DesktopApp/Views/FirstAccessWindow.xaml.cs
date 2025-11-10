@@ -6,24 +6,24 @@ namespace GLLRV.DesktopApp.Views
 {
     public partial class FirstAccessWindow : Window
     {
-        private readonly Usuario _user;
-        private readonly JsonUserStore _store;
+        private readonly Usuario _usuario;
+        private readonly Auth _auth = new Auth();
 
-        public FirstAccessWindow(Usuario user, JsonUserStore store)
+        public FirstAccessWindow(Usuario usuario)
         {
             InitializeComponent();
-            _user = user;
-            _store = store;
+            _usuario = usuario;
+            UsernameText.Text = _usuario.NomeUsuario;
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            var senha1 = NewPasswordBox.Password;
-            var senha2 = ConfirmPasswordBox.Password;
-            var frase = SecurityPhraseTextBox.Text.Trim();
+            var novaSenha = NewPasswordBox.Password ?? "";
+            var confirmar = ConfirmPasswordBox.Password ?? "";
+            var frase = SecurityPhraseTextBox.Text?.Trim() ?? "";
 
-            if (string.IsNullOrWhiteSpace(senha1) ||
-                string.IsNullOrWhiteSpace(senha2) ||
+            if (string.IsNullOrWhiteSpace(novaSenha) ||
+                string.IsNullOrWhiteSpace(confirmar) ||
                 string.IsNullOrWhiteSpace(frase))
             {
                 MessageBox.Show("Preencha todos os campos.", "Atenção",
@@ -31,25 +31,32 @@ namespace GLLRV.DesktopApp.Views
                 return;
             }
 
-            if (senha1 != senha2)
+            if (novaSenha != confirmar)
             {
-                MessageBox.Show("As senhas não conferem.", "Atenção",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("As senhas não conferem.", "Erro",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _user.SenhaHash = Auth.Sha256Hex(senha1);
-            _user.FraseSeguranca = frase;
-            _user.PrimeiroAcesso = false;
+            if (!_auth.AtualizarPrimeiroAcesso(_usuario, novaSenha, frase))
+            {
+                MessageBox.Show("Erro ao atualizar dados do usuário.", "Erro",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            _store.UpdateUsuario(_user);
-            Auth.AtualizarUsuario(_user, _store);
-
-            MessageBox.Show("Senha atualizada com sucesso.", "Sucesso",
+            MessageBox.Show("Senha cadastrada com sucesso!", "Sucesso",
                 MessageBoxButton.OK, MessageBoxImage.Information);
 
-            var main = new MainWindow(_user);
+            var main = new MainWindow(_usuario);
             main.Show();
+            Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var login = new LoginWindow();
+            login.Show();
             Close();
         }
     }

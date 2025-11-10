@@ -99,7 +99,7 @@ namespace GLLRV.DesktopApp.Services
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
 
-        private void EnsureSeedUser()
+        public void EnsureSeedUser()
         {
             var usuarios = LoadAll();
             if (usuarios.Any())

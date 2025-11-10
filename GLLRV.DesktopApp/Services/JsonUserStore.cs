@@ -69,43 +69,4 @@ namespace GLLRV.DesktopApp.Services
                 existing.Nivel = usuario.Nivel;
                 existing.Categoria = usuario.Categoria;
                 existing.PasswordHash = usuario.PasswordHash;
-                existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
-                existing.Ativo = usuario.Ativo;
-            }
-
-            SaveAllInternal(usuarios);
-        }
-
-        #region helpers
-
-        private List<Usuario> LoadAllInternal()
-        {
-            if (!File.Exists(_filePath))
-                return new List<Usuario>();
-
-            var json = File.ReadAllText(_filePath);
-            if (string.IsNullOrWhiteSpace(json))
-                return new List<Usuario>();
-
-            return JsonSerializer.Deserialize<List<Usuario>>(json)
-                   ?? new List<Usuario>();
-        }
-
-        private void SaveAllInternal(List<Usuario> usuarios)
-        {
-            var json = JsonSerializer.Serialize(usuarios,
-                new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(_filePath, json);
-        }
-
-        public static string HashPassword(string password)
-        {
-            using var sha = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha.ComputeHash(bytes);
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-        }
-
-        #endregion
-    }
-}
+                existing.PrimeiroA

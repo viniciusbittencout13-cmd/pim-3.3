@@ -1,118 +1,19 @@
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using GLLRV.DesktopApp.Models;
-using GLLRV.DesktopApp.Views.Pages;
-
-namespace GLLRV.DesktopApp.Views
+private void CarregarUsuarioNoTopo()
 {
-    public partial class MainWindow : Window
-    {
-        private readonly Usuario _usuario;
+    if (_usuario == null) return;
 
-        public MainWindow(Usuario usuario)
-        {
-            InitializeComponent();
+    UserNameText.Text = _usuario.NomeCompleto ?? _usuario.Username ?? "-";
+    UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel ?? "-"}";
+    UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria ?? "-"}";
 
-            _usuario = usuario ?? new Usuario
-            {
-                NomeUsuario = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                Nivel = "Nível 2",
-                Categoria = "Servidores e Gerenciamento de Rede",
-                PrimeiroAcesso = false
-            };
+    var nome = _usuario.NomeCompleto ?? _usuario.Username ?? "";
+    var partes = nome.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
 
-            CarregarUsuarioNoTopo();
-            IniciarRelogio();
-            AbrirChamadosPendentes();
-        }
+    string iniciais = "?";
+    if (partes.Length >= 2)
+        iniciais = $"{partes[0][0]}{partes[1][0]}";
+    else if (partes.Length == 1)
+        iniciais = partes[0][0].ToString();
 
-        private void CarregarUsuarioNoTopo()
-        {
-            UserNameText.Text = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
-                ? _usuario.NomeUsuario
-                : _usuario.NomeCompleto;
-
-            UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel}";
-            UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria}";
-
-            var nomeBase = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
-                ? _usuario.NomeUsuario
-                : _usuario.NomeCompleto;
-
-            var partes = (nomeBase ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string iniciais = "?";
-            if (partes.Length >= 2)
-                iniciais = $"{partes[0][0]}{partes[1][0]}";
-            else if (partes.Length == 1)
-                iniciais = partes[0][0].ToString();
-
-            InitialsText.Text = iniciais.ToUpperInvariant();
-        }
-
-        private void IniciarRelogio()
-        {
-            var timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-
-            timer.Tick += (_, _) =>
-            {
-                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-            };
-
-            timer.Start();
-        }
-
-        private void SetContent(UserControl control)
-        {
-            if (ContentHost == null)
-                return;
-
-            ContentHost.Content = control;
-        }
-
-        private void AbrirChamadosPendentes()
-        {
-            SetContent(new ChamadosPendentesPage());
-        }
-
-        private void UsuariosButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetContent(new UsuariosPage());
-        }
-
-        private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetContent(new RelatoriosPage());
-        }
-
-        private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-        {
-            AbrirChamadosPendentes();
-        }
-
-        private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetContent(new HistoricoChamadosPage());
-        }
-
-        private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetContent(new ChamadosAndamentoPage());
-        }
-
-        private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetContent(new ConfiguracaoPage());
-        }
-
-        private void SairButton_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-    }
+    InitialsText.Text = iniciais.ToUpperInvariant();
 }

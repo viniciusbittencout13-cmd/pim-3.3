@@ -1,0 +1,48 @@
+<Window x:Class="GLLRV.DesktopApp.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GLLRV - Login"
+        Width="480"
+        Height="360"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#f2f4f8">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Seja bem-vindo"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Margin="0,0,0,4"/>
+        <TextBlock Text="Acesse com seu usuário e senha"
+                   Grid.Row="1"
+                   FontSize="12"
+                   Foreground="#555"
+                   Margin="0,0,0,16"/>
+
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Usuário" Margin="0,0,0,4"/>
+            <TextBox x:Name="UsernameTextBox" Height="28"/>
+
+            <TextBlock Text="Senha" Margin="0,12,0,4"/>
+            <PasswordBox x:Name="PasswordBox" Height="28"/>
+        </StackPanel>
+
+        <Button Grid.Row="3"
+                Content="ENTRAR"
+                Height="40"
+                Width="140"
+                HorizontalAlignment="Right"
+                Margin="0,16,0,0"
+                Click="LoginButton_Click"
+                Background="#111827"
+                Foreground="White"
+                BorderThickness="0"
+                Cursor="Hand"/>
+    </Grid>
+</Window>

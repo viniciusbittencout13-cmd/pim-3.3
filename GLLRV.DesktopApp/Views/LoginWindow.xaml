@@ -39,7 +39,7 @@
                 Width="140"
                 HorizontalAlignment="Right"
                 Margin="0,16,0,0"
-                Click="LoginButton_Click"
+                Click="EntrarButton_Click"
                 Background="#111827"
                 Foreground="White"
                 BorderThickness="0"

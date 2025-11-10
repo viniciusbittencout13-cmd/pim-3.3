@@ -6,10 +6,10 @@ namespace GLLRV.DesktopApp.Services
     {
         private readonly JsonUserStore _store = new JsonUserStore();
 
-        // Método principal de autenticação
-        public Usuario Autenticar(string username, string password, out string mensagemErro)
+        // Autenticação principal
+        public Usuario? Autenticar(string username, string password, out string mensagemErro)
         {
-            mensagemErro = null;
+            mensagemErro = string.Empty;
 
             var user = _store.GetByUsername(username);
             if (user == null || !user.Ativo)
@@ -28,24 +28,31 @@ namespace GLLRV.DesktopApp.Services
             return user;
         }
 
-        // Alias compatível (sem mensagemErro)
-        public Usuario Autenticar(string username, string password)
+        // Versão sem mensagem de erro (compatibilidade)
+        public Usuario? Autenticar(string username, string password)
         {
-            string erro;
-            return Autenticar(username, password, out erro);
+            return Autenticar(username, password, out _);
         }
 
-        // Atualiza o status de primeiro acesso (usado ao trocar a senha)
-        public void AtualizarPrimeiroAcesso(Usuario usuario)
+        // Alias compatível com código antigo
+        public Usuario? Login(string username, string password, out string mensagemErro)
         {
-            if (usuario == null) return;
+            return Autenticar(username, password, out mensagemErro);
+        }
 
+        // Usado na tela de primeiro acesso:
+        // atualiza senha, frase de segurança e marca que não é mais primeiro acesso.
+        public bool AtualizarPrimeiroAcesso(Usuario usuario, string novaSenha, string fraseSeguranca)
+        {
+            if (usuario == null) return false;
+            if (string.IsNullOrWhiteSpace(novaSenha)) return false;
+
+            usuario.PasswordHash = JsonUserStore.HashPassword(novaSenha);
+            usuario.FraseSeguranca = fraseSeguranca ?? string.Empty;
             usuario.PrimeiroAcesso = false;
-            _store.Update(usuario);
-        }
 
-        // Método compatível com código legado
-        public Usuario Login(string username, string password, out string mensagemErro)
-            => Autenticar(username, password, out mensagemErro);
+            _store.Update(usuario);
+            return true;
+        }
     }
 }

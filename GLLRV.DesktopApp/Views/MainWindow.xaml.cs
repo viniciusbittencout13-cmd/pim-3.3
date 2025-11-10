@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using GLLRV.DesktopApp.Models;
+using GLLRV.DesktopApp.Views.Pages;
 
 namespace GLLRV.DesktopApp.Views
 {
@@ -18,33 +19,24 @@ namespace GLLRV.DesktopApp.Views
             AbrirChamadosPendentes();
         }
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            _usuario = new Usuario
-            {
-                Username = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                Nivel = "2",
-                Categoria = "Servidores e gerenciamento de rede"
-            };
-            CarregarUsuarioNoTopo();
-            IniciarRelogio();
-            AbrirChamadosPendentes();
-        }
-
         private void CarregarUsuarioNoTopo()
         {
-            UserNameText.Text = _usuario.NomeCompleto;
+            var nome = string.IsNullOrWhiteSpace(_usuario.NomeCompleto)
+                ? _usuario.NomeUsuario
+                : _usuario.NomeCompleto;
+
+            UserNameText.Text = nome;
             UserLevelText.Text = $"TÉCNICO: NÍVEL {_usuario.Nivel}";
             UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria}";
 
-            var partes = (_usuario.NomeCompleto ?? _usuario.Username).Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string iniciais =
-                partes.Length >= 2 ? $"{partes[0][0]}{partes[1][0]}".ToUpper() :
-                _usuario.Username.Length > 0 ? _usuario.Username[0].ToString().ToUpper() : "U";
+            var partes = (nome ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string iniciais = "?";
+            if (partes.Length >= 2)
+                iniciais = $"{partes[0][0]}{partes[1][0]}";
+            else if (partes.Length == 1)
+                iniciais = partes[0][0].ToString();
 
-            InitialsText.Text = iniciais;
+            InitialsText.Text = iniciais.ToUpperInvariant();
         }
 
         private void IniciarRelogio()
@@ -55,30 +47,29 @@ namespace GLLRV.DesktopApp.Views
             };
             timer.Tick += (_, _) =>
             {
-                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
             };
             timer.Start();
         }
 
+        private void SetPage(object page)
+        {
+            ContentHost.Content = page;
+        }
+
         private void AbrirChamadosPendentes()
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock
-            {
-                Text = "Chamados pendentes (tela em construção)",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                FontSize = 18
-            };
+            SetPage(new ChamadosPendentesPage());
         }
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock { Text = "Usuários (tela em construção)", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontSize = 18 };
+            SetPage(new UsuariosPage());
         }
 
         private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock { Text = "Relatórios (tela em construção)", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontSize = 18 };
+            SetPage(new RelatoriosPage());
         }
 
         private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
@@ -88,17 +79,17 @@ namespace GLLRV.DesktopApp.Views
 
         private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock { Text = "Histórico de chamados (tela em construção)", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontSize = 18 };
+            SetPage(new HistoricoChamadosPage());
         }
 
         private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock { Text = "Chamados em andamento (tela em construção)", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontSize = 18 };
+            SetPage(new ChamadosAndamentoPage());
         }
 
         private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new System.Windows.Controls.TextBlock { Text = "Configurações (tela em construção)", HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, FontSize = 18 };
+            SetPage(new ConfiguracaoPage());
         }
 
         private void SairButton_Click(object sender, RoutedEventArgs e)

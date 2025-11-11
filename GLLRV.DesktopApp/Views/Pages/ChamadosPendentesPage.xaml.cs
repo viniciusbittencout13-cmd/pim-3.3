@@ -3,38 +3,17 @@ using System.Windows.Controls;
 
 namespace GLLRV.DesktopApp.Views.Pages
 {
-    public partial class ChamadosPendentesPage : UserControl
+    public partial class ChamadosPendentesPage : Page
     {
         public ChamadosPendentesPage()
         {
             InitializeComponent();
-            CarregarChamadosFake();
-        }
 
-        private void CarregarChamadosFake()
-        {
-            var dados = new List<ChamadoGridItem>
+            // Mock de dados de teste
+            ChamadosGrid.ItemsSource = new List<dynamic>
             {
-                new ChamadoGridItem
-                {
-                    Usuario = "GUSTAVO M",
-                    NivelPrioridade = "ALTA",
-                    Dificuldade = "MÉDIA",
-                    Data = "04/05/2025",
-                    Horario = "15:03"
-                }
+                new { Usuario = "VINICIUS", NivelPrioridade = "ALTA", Dificuldade = "MÉDIA", Data = "05/05/2025", Horario = "14:30" }
             };
-
-            ChamadosGrid.ItemsSource = dados;
         }
-    }
-
-    public class ChamadoGridItem
-    {
-        public string Usuario { get; set; } = "";
-        public string NivelPrioridade { get; set; } = "";
-        public string Dificuldade { get; set; } = "";
-        public string Data { get; set; } = "";
-        public string Horario { get; set; } = "";
     }
 }

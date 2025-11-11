@@ -101,10 +101,14 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock Text="CHAMADOS PENDENTES"
-                           FontSize="22"
-                           FontWeight="Bold"
-                           Foreground="#111827"/>
+                <TextBlock x:Name="PageTitleText"
+                  Text="CHAMADOS PENDENTES"
+                  FontSize="24"
+                  FontWeight="Bold"
+                  Margin="280,25,0,0"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Left"/>
+
             </StackPanel>
 
             <StackPanel Grid.Column="1"

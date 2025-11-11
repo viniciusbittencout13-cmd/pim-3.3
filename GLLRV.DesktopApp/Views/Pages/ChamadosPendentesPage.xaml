@@ -6,109 +6,79 @@
              mc:Ignorable="d"
              Background="Transparent">
 
-    <Grid Margin="0">
-        <Grid.RowDefinitions>
-            <!-- Cabeçalho / filtros -->
-            <RowDefinition Height="Auto"/>
-            <!-- Lista -->
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid>
 
-        <!-- CABEÇALHO -->
-        <StackPanel Grid.Row="0"
-                    Margin="0,0,0,16">
-            <TextBlock Text="Chamados pendentes"
+        <!-- FUNDO (se tiver a imagem, ajusta o Source) -->
+        <Image Source="/Assets/background-gllrv.png"
+               Stretch="Fill"
+               Opacity="1"
+               Panel.ZIndex="-1"/>
+
+        <!-- CONTEÚDO CENTRAL -->
+        <Grid Margin="260,40,40,40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- TÍTULO -->
+            <TextBlock Text="CHAMADOS PENDENTES"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center"
                        FontSize="22"
                        FontWeight="Bold"
-                       Foreground="#111827"/>
+                       Foreground="#222"/>
 
-            <TextBlock Text="Visualize e gerencie todos os chamados que ainda aguardam atendimento."
-                       Margin="0,4,0,0"
-                       Foreground="#6B7280"
-                       FontSize="12"/>
+            <!-- CABEÇALHO DAS COLUNAS -->
+            <Border Grid.Row="2"
+                    Margin="0,0,0,8"
+                    Padding="16,8"
+                    Background="#F2F2F2"
+                    CornerRadius="18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>   <!-- Usuário -->
+                        <ColumnDefinition Width="2*"/>   <!-- Nível -->
+                        <ColumnDefinition Width="2*"/>   <!-- Prioridade -->
+                        <ColumnDefinition Width="2*"/>   <!-- Dificuldade -->
+                        <ColumnDefinition Width="2*"/>   <!-- Data -->
+                        <ColumnDefinition Width="2*"/>   <!-- Horário -->
+                    </Grid.ColumnDefinitions>
 
-            <!-- Linha de filtros -->
-            <StackPanel Orientation="Horizontal"
-            Margin="0,16,0,0"
-            VerticalAlignment="Center">
-    <!-- Busca -->
-    <Border Background="#F3F4F6"
-            CornerRadius="6"
-            Padding="8"
-            Width="260">
-        <DockPanel>
-            <TextBlock Text="🔍"
-                       Margin="0,0,6,0"
-                       VerticalAlignment="Center"/>
-            <TextBox x:Name="SearchBox"
-         BorderThickness="0"
-         Background="Transparent"
-         VerticalAlignment="Center"
-         FontSize="12"
-         TextChanged="SearchBox_TextChanged"
-         ToolTip="Buscar por número, cliente ou assunto..."/>
-        </DockPanel>
-    </Border>
+                    <TextBlock Grid.Column="0" Text="USUÁRIO"             FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                    <TextBlock Grid.Column="1" Text="NÍVEL DE PRIORIDADE" FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                    <TextBlock Grid.Column="2" Text="DIFICULDADE"         FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                    <TextBlock Grid.Column="3" Text="DATA"                FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                    <TextBlock Grid.Column="4" Text="HORÁRIO"             FontWeight="Bold" FontSize="12" Foreground="#333"/>
+                </Grid>
+            </Border>
 
-    <!-- Prioridade -->
-    <ComboBox x:Name="PrioridadeFilter"
-              Width="140"
-              Margin="8,0,0,0"
-              Padding="4"
-              FontSize="12"
-              SelectionChanged="Filtro_Changed">
-        <ComboBoxItem Content="Todas prioridades" IsSelected="True"/>
-        <ComboBoxItem Content="Crítica"/>
-        <ComboBoxItem Content="Alta"/>
-        <ComboBoxItem Content="Média"/>
-        <ComboBoxItem Content="Baixa"/>
-    </ComboBox>
-
-    <!-- SLA -->
-    <ComboBox x:Name="SlaFilter"
-              Width="160"
-              Margin="8,0,0,0"
-              Padding="4"
-              FontSize="12"
-              SelectionChanged="Filtro_Changed">
-        <ComboBoxItem Content="Todos SLAs" IsSelected="True"/>
-        <ComboBoxItem Content="Vencidos"/>
-        <ComboBoxItem Content="Vencendo hoje"/>
-        <ComboBoxItem Content="Dentro do prazo"/>
-    </ComboBox>
-</StackPanel>
-
-        <!-- GRADE DE CHAMADOS -->
-        <Border Grid.Row="1"
-                Background="#FFFFFF"
-                CornerRadius="10"
-                Padding="10"
-                BorderBrush="#E5E7EB"
-                BorderThickness="1">
+            <!-- LISTA DE CHAMADOS -->
             <DataGrid x:Name="ChamadosGrid"
+                      Grid.Row="2"
+                      Margin="0,40,0,0"
                       AutoGenerateColumns="False"
+                      IsReadOnly="True"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
-                      IsReadOnly="True"
-                      HeadersVisibility="Column"
+                      HeadersVisibility="None"
                       GridLinesVisibility="Horizontal"
-                      RowHeight="34"
-                      FontSize="12"
-                      SelectionMode="Single"
-                      SelectionUnit="FullRow"
+                      Background="#CCFFFFFF"
+                      BorderBrush="Transparent"
                       BorderThickness="0"
-                      Background="White">
+                      RowHeight="40">
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Nº" Binding="{Binding Numero}" Width="80"/>
-                    <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}" Width="*"/>
-                    <DataGridTextColumn Header="Assunto" Binding="{Binding Assunto}" Width="2*"/>
-                    <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="100"/>
-                    <DataGridTextColumn Header="Abertura" Binding="{Binding DataAbertura}" Width="140"/>
-                    <DataGridTextColumn Header="SLA" Binding="{Binding SLA}" Width="110"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+                    <DataGridTextColumn Header="Usuário"     Binding="{Binding Usuario}"          Width="2*"/>
+                    <DataGridTextColumn Header="Prioridade"  Binding="{Binding NivelPrioridade}" Width="2*"/>
+                    <DataGridTextColumn Header="Dificuldade" Binding="{Binding Dificuldade}"     Width="2*"/>
+                    <DataGridTextColumn Header="Data"        Binding="{Binding DataAbertura}"    Width="2*"
+                                       Binding.StringFormat="dd/MM/yyyy"/>
+                    <DataGridTextColumn Header="Horário"     Binding="{Binding HoraAbertura}"    Width="2*"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Border>
 
+        </Grid>
     </Grid>
 </UserControl>

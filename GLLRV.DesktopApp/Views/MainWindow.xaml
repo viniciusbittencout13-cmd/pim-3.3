@@ -6,9 +6,14 @@
         Width="1280"
         Height="720"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize"
-        Background="{StaticResource WindowBackgroundBrush}">
+        ResizeMode="CanResize">
 
+        <Window.Background>
+        <ImageBrush ImageSource="/Assets/GLLRV.png"
+                    Stretch="UniformToFill"
+                    Opacity="0.35"/>
+    </Window.Background>
+        
         <Window.Resources>
     <ImageBrush x:Key="WindowBackgroundBrush"
                 ImageSource="/Assets/GLLRV.png"

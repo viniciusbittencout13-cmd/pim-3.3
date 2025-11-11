@@ -1,39 +1,36 @@
-<Page x:Class="GLLRV.DesktopApp.Views.Pages.ChamadosPendentesPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="Transparent">
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ChamadosPendentesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
 
-    <Grid Margin="40">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Título -->
         <TextBlock Text="CHAMADOS PENDENTES"
-                   FontSize="24"
+                   FontSize="22"
                    FontWeight="Bold"
-                   Foreground="#111827"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,16"/>
 
-        <!-- Tabela -->
         <DataGrid x:Name="ChamadosGrid"
                   Grid.Row="1"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  Margin="0">
-
+                  CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="USUÁRIO" Binding="{Binding Usuario}" Width="*" />
-                <DataGridTextColumn Header="NÍVEL DE PRIORIDADE" Binding="{Binding NivelPrioridade}" Width="*" />
-                <DataGridTextColumn Header="DIFICULDADE" Binding="{Binding Dificuldade}" Width="*" />
-                <DataGridTextColumn Header="DATA" Binding="{Binding Data}" Width="*" />
-                <DataGridTextColumn Header="HORÁRIO" Binding="{Binding Horario}" Width="*" />
+                <DataGridTextColumn Header="USUÁRIO" Binding="{Binding Usuario}" Width="*"/>
+                <DataGridTextColumn Header="NÍVEL DE PRIORIDADE" Binding="{Binding Prioridade}" Width="*"/>
+                <DataGridTextColumn Header="DIFICULDADE" Binding="{Binding Dificuldade}" Width="*"/>
+                <DataGridTextColumn Header="DATA" Binding="{Binding Data}" Width="*"/>
+                <DataGridTextColumn Header="HORÁRIO" Binding="{Binding Horario}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
-</Page>
+</UserControl>

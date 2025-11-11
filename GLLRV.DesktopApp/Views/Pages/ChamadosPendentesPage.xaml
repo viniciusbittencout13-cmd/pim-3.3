@@ -7,8 +7,9 @@
       d:DesignHeight="600" d:DesignWidth="900"
       Background="Transparent">
 
+    <!-- Só o conteúdo, sem menu lateral aqui -->
     <Grid Margin="280,90,40,40">
-        <DataGrid x:Name="ChamadosGrid"
+        <DataGrid x:Name="ChamadosDataGrid"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   HeadersVisibility="Column"
@@ -21,21 +22,19 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="USUÁRIO"
                                     Binding="{Binding UsuarioNome}"
-                                    Width="*"/>
+                                    Width="*" />
                 <DataGridTextColumn Header="NÍVEL DE PRIORIDADE"
                                     Binding="{Binding NivelPrioridade}"
-                                    Width="*"/>
+                                    Width="*" />
                 <DataGridTextColumn Header="DIFICULDADE"
                                     Binding="{Binding Dificuldade}"
-                                    Width="*"/>
+                                    Width="*" />
                 <DataGridTextColumn Header="DATA"
                                     Binding="{Binding DataAbertura}"
-                                    Width="120"
-                                    ElementStyle="{StaticResource CenterCellStyle}"/>
+                                    Width="120" />
                 <DataGridTextColumn Header="HORÁRIO"
                                     Binding="{Binding HoraAbertura}"
-                                    Width="100"
-                                    ElementStyle="{StaticResource CenterCellStyle}"/>
+                                    Width="100" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

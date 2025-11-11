@@ -13,13 +13,6 @@
                     Stretch="UniformToFill"
                     Opacity="0.35"/>
     </Window.Background>
-        
-        <Window.Resources>
-    <ImageBrush x:Key="WindowBackgroundBrush"
-                ImageSource="/Assets/GLLRV.png"
-                Stretch="UniformToFill"
-                Opacity="0.35"/>
-</Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>

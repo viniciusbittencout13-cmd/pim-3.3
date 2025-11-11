@@ -17,7 +17,7 @@ namespace GLLRV.DesktopApp.Views
             _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
 
             // Preenche dados do técnico (se tiver esses campos no Usuario)
-            UserNameText.Text = _usuario.Username;
+            //UserNameText.Text = _usuario.Username;
             UserLevelText.Text = $"Técnico - Nível {_usuario.Nivel}";
             UserCategoryText.Text = $"Categoria: {_usuario.Categoria}";
 

@@ -70,13 +70,26 @@
                       RowHeight="40">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Usuário"     Binding="{Binding Usuario}"          Width="2*"/>
-                    <DataGridTextColumn Header="Prioridade"  Binding="{Binding NivelPrioridade}" Width="2*"/>
-                    <DataGridTextColumn Header="Dificuldade" Binding="{Binding Dificuldade}"     Width="2*"/>
-                    <DataGridTextColumn Header="Data"        Binding="{Binding DataAbertura}"    Width="2*"
-                                       Binding.StringFormat="dd/MM/yyyy"/>
-                    <DataGridTextColumn Header="Horário"     Binding="{Binding HoraAbertura}"    Width="2*"/>
-                </DataGrid.Columns>
+    <DataGridTextColumn Header="Usuário"
+                        Binding="{Binding Usuario}"
+                        Width="2*" />
+
+    <DataGridTextColumn Header="Prioridade"
+                        Binding="{Binding NivelPrioridade}"
+                        Width="2*" />
+
+    <DataGridTextColumn Header="Dificuldade"
+                        Binding="{Binding Dificuldade}"
+                        Width="2*" />
+
+    <DataGridTextColumn Header="Data"
+                        Width="2*"
+                        Binding="{Binding DataAbertura, StringFormat=dd/MM/yyyy}" />
+
+    <DataGridTextColumn Header="Horário"
+                        Binding="{Binding HoraAbertura}"
+                        Width="2*" />
+</DataGrid.Columns>
             </DataGrid>
 
         </Grid>

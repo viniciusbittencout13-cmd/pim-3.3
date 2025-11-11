@@ -8,17 +8,22 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize">
 
-        <Window.Background>
-        <ImageBrush ImageSource="/Assets/GLLRV.png"
+    <!-- BRUSH DO FUNDO COM O LOGO -->
+    <Window.Resources>
+        <ImageBrush x:Key="WindowBackgroundBrush"
+                    ImageSource="pack://application:,,,/GLLRV.DesktopApp;component/Assets/GLLRV.png"
                     Stretch="UniformToFill"
-                    Opacity="0.35"/>
-    </Window.Background>
+                    Opacity="0.35" />
+    </Window.Resources>
 
-    <Grid>
+    <!-- FUNDO DA JANELA -->
+    <Grid Background="{StaticResource WindowBackgroundBrush}">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="260" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
@@ -32,112 +37,105 @@
             <StackPanel Margin="16">
 
                 <!-- BLOCO DO TÉCNICO -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
-                    <Border Width="56"
-                            Height="56"
+                <StackPanel Orientation="Horizontal" Margin="0,16,0,32">
+                    <Border Width="56" Height="56"
                             CornerRadius="28"
-                            Background="#ffffff33"
+                            Background="#F97316"
                             VerticalAlignment="Center">
-                        <TextBlock x:Name="InitialsText"
+                        <TextBlock Text="{Binding NomeInicial, Mode=OneWay}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
-                                   Foreground="White"
                                    FontWeight="Bold"
-                                   FontSize="18"/>
+                                   Foreground="White"/>
                     </Border>
 
                     <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
                         <TextBlock x:Name="UserNameText"
+                                   Text="Usuário"
                                    Foreground="White"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                                   FontWeight="Bold"
+                                   FontSize="14"/>
                         <TextBlock x:Name="UserLevelText"
-                                   Foreground="White"
-                                   FontSize="11"/>
+                                   Text="Técnico - Nível 1"
+                                   Foreground="#9CA3AF"
+                                   FontSize="12"/>
                         <TextBlock x:Name="UserCategoryText"
-                                   Foreground="White"
-                                   FontSize="11"/>
+                                   Text="Categoria"
+                                   Foreground="#9CA3AF"
+                                   FontSize="12"/>
                     </StackPanel>
                 </StackPanel>
 
                 <!-- BOTÕES DO MENU -->
                 <Button Content="Usuários"
-                        Margin="0 0 0 8"
+                        Margin="0,0,0,8"
                         Height="40"
-                        Click="UsuariosButton_Click" />
-
+                        Click="UsuariosButton_Click"/>
                 <Button Content="Relatórios"
-                        Margin="0 0 0 8"
+                        Margin="0,0,0,8"
                         Height="40"
-                        Click="RelatoriosButton_Click" />
-
-                <Button Content="Chamados pendentes"
-                        Margin="0 0 0 8"
+                        Click="RelatoriosButton_Click"/>
+                <Button Content="Chamados Pendentes"
+                        Margin="0,0,0,8"
                         Height="40"
-                        Click="ChamadosPendentesButton_Click" />
-
-                <Button Content="Histórico chamados"
-                        Margin="0 0 0 8"
+                        Click="ChamadosPendentesButton_Click"/>
+                <Button Content="Histórico de Chamados"
+                        Margin="0,0,0,8"
                         Height="40"
-                        Click="HistoricoChamadosButton_Click" />
-
-                <Button Content="Chamados andamento"
-                        Margin="0 0 0 8"
+                        Click="HistoricoChamadosButton_Click"/>
+                <Button Content="Chamados em Andamento"
+                        Margin="0,0,0,8"
                         Height="40"
-                        Click="ChamadosAndamentoButton_Click" />
-
+                        Click="ChamadosAndamentoButton_Click"/>
                 <Button Content="Configurações"
-                        Margin="0 24 0 0"
+                        Margin="0,16,0,0"
                         Height="40"
-                        Click="ConfiguracaoButton_Click" />
+                        Click="ConfiguracaoButton_Click"/>
+
             </StackPanel>
         </Border>
 
-        <!-- TOPO DIREITA (DATA/HORA + SAIR) -->
-        <Grid Grid.Row="0" Grid.Column="1" Margin="24,16,24,16">
+        <!-- TOPO -->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="16,16,16,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="DateTimeText"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Right"
-                       FontSize="14"
-                       Foreground="#111"
-                       Margin="0,0,16,0"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="CHAMADOS PENDENTES"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#111827"/>
+            </StackPanel>
 
-            <Button Grid.Column="1"
-                    Width="100"
-                    Height="36"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Click="SairButton_Click"
-                    Background="#E5E5E5"
-                    Foreground="#111"
-                    BorderThickness="0"
-                    FontWeight="Bold"
-                    Cursor="Hand">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="18">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Content="SAIR"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Spacing="12">
+                <TextBlock x:Name="DateTimeText"
+                           VerticalAlignment="Center"
+                           Foreground="#111827"
+                           FontWeight="SemiBold"/>
+                <Button Content="SAIR"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,0,0"
+                        Click="SairButton_Click"/>
+            </StackPanel>
         </Grid>
 
-        <!-- ÁREA DE CONTEÚDO -->
+        <!-- CONTEÚDO (PÁGINAS) -->
         <Border Grid.Row="1"
                 Grid.Column="1"
-                Margin="24"
-                Background="#F9FAFB"
+                Margin="16,8,16,16"
                 CornerRadius="24"
-                Padding="24">
-            <Grid x:Name="ContentArea" />
+                Background="#F9FAFB"
+                Opacity="0.92">
+            <Frame x:Name="ContentFrame"
+                   NavigationUIVisibility="Hidden"
+                   Background="Transparent" />
         </Border>
+
     </Grid>
 </Window>

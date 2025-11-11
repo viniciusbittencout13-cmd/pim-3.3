@@ -6,7 +6,7 @@
         Height="720"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        Background="{StaticResource AppBackgroundBrush}">
+        Background="#f2f4f8">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="260" />

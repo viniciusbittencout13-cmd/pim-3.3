@@ -1,6 +1,5 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using GLLRV.DesktopApp.Models;
 using GLLRV.DesktopApp.Views.Pages;
@@ -15,150 +14,61 @@ namespace GLLRV.DesktopApp.Views
         {
             InitializeComponent();
 
-            _usuario = usuario ?? new Usuario
-            {
-                NomeUsuario = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                Nivel = "Nível 2",
-                Categoria = "Servidores / Rede"
-            };
+            _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
 
-            Loaded += MainWindow_Loaded;
-        }
+            // Preenche dados do técnico (se tiver esses campos no Usuario)
+            UserNameText.Text = _usuario.Nome;
+            UserLevelText.Text = $"Técnico - Nível {_usuario.Nivel}";
+            UserCategoryText.Text = $"Categoria: {_usuario.Categoria}";
 
-        public MainWindow()
-            : this(new Usuario
-            {
-                NomeUsuario = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                Nivel = "Nível 2",
-                Categoria = "Servidores / Rede"
-            })
-        {
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            CarregarUsuarioNoTopo();
-            IniciarRelogio();
-            AbrirChamadosPendentes();
-        }
-
-        private void CarregarUsuarioNoTopo()
-        {
-            if (_usuario == null) return;
-
-            UserNameText.Text = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "-";
-            UserLevelText.Text = $"TÉCNICO: {_usuario.Nivel ?? "-"}";
-            UserCategoryText.Text = $"CATEGORIA: {_usuario.Categoria ?? "-"}";
-
-            var nome = _usuario.NomeCompleto ?? _usuario.NomeUsuario ?? "";
-            var partes = nome.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            string iniciais = "?";
-            if (partes.Length >= 2)
-                iniciais = $"{partes[0][0]}{partes[1][0]}";
-            else if (partes.Length == 1)
-                iniciais = partes[0][0].ToString();
-
-            InitialsText.Text = iniciais.ToUpperInvariant();
-        }
-
-        private void IniciarRelogio()
-        {
+            // Relógio no canto
             var timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-
             timer.Tick += (_, _) =>
             {
                 DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
             };
-
             timer.Start();
-        }
 
-        // ---------- Navegação ----------
+            // Abre Chamados Pendentes padrão
+            AbrirChamadosPendentes();
+        }
 
         private void AbrirChamadosPendentes()
         {
-            try
-            {
-                ContentArea.Children.Clear();
-                ContentArea.Children.Add(new ChamadosPendentesPage());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Erro ao abrir Chamados Pendentes:\n{ex.Message}",
-                    "Erro",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
+            ContentFrame.Content = new ChamadosPendentesPage();
         }
 
         private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-            => AbrirChamadosPendentes();
+        {
+            AbrirChamadosPendentes();
+        }
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Usuários (tela em construção)",
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 18
-            });
+            ContentFrame.Content = new UsuariosPage();
         }
 
         private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Relatórios (tela em construção)",
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 18
-            });
+            ContentFrame.Content = new RelatoriosPage();
         }
 
         private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Histórico de chamados (tela em construção)",
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 18
-            });
+            ContentFrame.Content = new HistoricoChamadosPage();
         }
 
         private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Chamados em andamento (tela em construção)",
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 18
-            });
+            ContentFrame.Content = new ChamadosAndamentoPage();
         }
 
         private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new TextBlock
-            {
-                Text = "Configurações (tela em construção)",
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 18
-            });
+            ContentFrame.Content = new ConfiguracaoPage();
         }
 
         private void SairButton_Click(object sender, RoutedEventArgs e)

@@ -70,7 +70,7 @@ namespace GLLRV.DesktopApp.Views
         private void ConfiguracoesButton_Click(object sender, RoutedEventArgs e)
         {
             PageTitleText.Text = "CONFIGURAÇÕES";
-            MainContentFrame.Content = new ConfiguracoesPage();
+            MainContentFrame.Content = new ConfiguracaoPage();
         }
     }
 }

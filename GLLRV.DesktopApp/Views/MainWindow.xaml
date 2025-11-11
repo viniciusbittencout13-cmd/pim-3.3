@@ -34,6 +34,11 @@
                 Background="#111827">
             <StackPanel Margin="16">
 
+            <Frame x:Name="MainContentFrame"
+       Margin="0,80,0,0"
+       NavigationUIVisibility="Hidden"
+       Background="Transparent" />
+
                 <!-- BLOCO DO TÉCNICO -->
                 <StackPanel Orientation="Horizontal" Margin="0,16,0,32">
                     <Border Width="56" Height="56"

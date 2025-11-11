@@ -113,5 +113,15 @@ namespace GLLRV.DesktopApp.Views
         {
             Application.Current.Shutdown();
         }
+        private void AbrirChamadosPendentes()
+{
+    ContentArea.Children.Clear();
+    ContentArea.Children.Add(new GLLRV.DesktopApp.Views.Pages.ChamadosPendentesPage());
+}
+
+private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
+{
+    AbrirChamadosPendentes();
+}
     }
 }

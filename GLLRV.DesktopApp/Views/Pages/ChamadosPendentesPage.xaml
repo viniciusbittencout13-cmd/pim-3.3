@@ -29,56 +29,54 @@
 
             <!-- Linha de filtros -->
             <StackPanel Orientation="Horizontal"
-                        Margin="0,16,0,0"
-                        VerticalAlignment="Center"
-                        Spacing="8">
+            Margin="0,16,0,0"
+            VerticalAlignment="Center">
+    <!-- Busca -->
+    <Border Background="#F3F4F6"
+            CornerRadius="6"
+            Padding="8"
+            Width="260">
+        <DockPanel>
+            <TextBlock Text="🔍"
+                       Margin="0,0,6,0"
+                       VerticalAlignment="Center"/>
+            <TextBox x:Name="SearchBox"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     VerticalAlignment="Center"
+                     FontSize="12"
+                     PlaceholderText="Buscar por número, cliente ou assunto..."
+                     TextChanged="SearchBox_TextChanged"/>
+        </DockPanel>
+    </Border>
 
-                <!-- Busca -->
-                <Border Background="#F3F4F6"
-                        CornerRadius="6"
-                        Padding="8"
-                        Width="260">
-                    <DockPanel>
-                        <TextBlock Text="🔍"
-                                   Margin="0,0,6,0"
-                                   VerticalAlignment="Center"/>
-                        <TextBox x:Name="SearchBox"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 VerticalAlignment="Center"
-                                 FontSize="12"
-                                 PlaceholderText="Buscar por número, cliente ou assunto..."
-                                 TextChanged="SearchBox_TextChanged"/>
-                    </DockPanel>
-                </Border>
+    <!-- Prioridade -->
+    <ComboBox x:Name="PrioridadeFilter"
+              Width="140"
+              Margin="8,0,0,0"
+              Padding="4"
+              FontSize="12"
+              SelectionChanged="Filtro_Changed">
+        <ComboBoxItem Content="Todas prioridades" IsSelected="True"/>
+        <ComboBoxItem Content="Crítica"/>
+        <ComboBoxItem Content="Alta"/>
+        <ComboBoxItem Content="Média"/>
+        <ComboBoxItem Content="Baixa"/>
+    </ComboBox>
 
-                <!-- Prioridade -->
-                <ComboBox x:Name="PrioridadeFilter"
-                          Width="140"
-                          Margin="0,0,0,0"
-                          Padding="4"
-                          FontSize="12"
-                          SelectionChanged="Filtro_Changed">
-                    <ComboBoxItem Content="Todas prioridades" IsSelected="True"/>
-                    <ComboBoxItem Content="Crítica"/>
-                    <ComboBoxItem Content="Alta"/>
-                    <ComboBoxItem Content="Média"/>
-                    <ComboBoxItem Content="Baixa"/>
-                </ComboBox>
-
-                <!-- SLA -->
-                <ComboBox x:Name="SlaFilter"
-                          Width="160"
-                          Padding="4"
-                          FontSize="12"
-                          SelectionChanged="Filtro_Changed">
-                    <ComboBoxItem Content="Todos SLAs" IsSelected="True"/>
-                    <ComboBoxItem Content="Vencidos"/>
-                    <ComboBoxItem Content="Vencendo hoje"/>
-                    <ComboBoxItem Content="Dentro do prazo"/>
-                </ComboBox>
-            </StackPanel>
-        </StackPanel>
+    <!-- SLA -->
+    <ComboBox x:Name="SlaFilter"
+              Width="160"
+              Margin="8,0,0,0"
+              Padding="4"
+              FontSize="12"
+              SelectionChanged="Filtro_Changed">
+        <ComboBoxItem Content="Todos SLAs" IsSelected="True"/>
+        <ComboBoxItem Content="Vencidos"/>
+        <ComboBoxItem Content="Vencendo hoje"/>
+        <ComboBoxItem Content="Dentro do prazo"/>
+    </ComboBox>
+</StackPanel>
 
         <!-- GRADE DE CHAMADOS -->
         <Border Grid.Row="1"

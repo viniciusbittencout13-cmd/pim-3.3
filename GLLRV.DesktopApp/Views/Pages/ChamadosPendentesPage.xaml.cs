@@ -11,8 +11,6 @@ namespace GLLRV.DesktopApp.Views.Pages
             CarregarChamadosFake();
         }
 
-        // Por enquanto, dados fake só para exibir no grid
-        // Depois a gente conecta no JSON/BD certinho.
         private void CarregarChamadosFake()
         {
             var dados = new List<ChamadoGridItem>

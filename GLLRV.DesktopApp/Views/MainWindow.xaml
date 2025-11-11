@@ -1,4 +1,5 @@
 <Window x:Class="GLLRV.DesktopApp.Views.MainWindow"
+<Window x:Class="GLLRV.DesktopApp.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:pages="clr-namespace:GLLRV.DesktopApp.Views.Pages"
@@ -8,15 +9,13 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize">
 
-    <!-- BRUSH DO FUNDO COM O LOGO -->
     <Window.Resources>
         <ImageBrush x:Key="WindowBackgroundBrush"
-                    ImageSource="pack://application:,,,/GLLRV.DesktopApp;component/Assets/GLLRV.png"
+                    ImageSource="pack://application:,,,/GLLRV.DesktopApp;component/Assets/gllrv-bg.png"
                     Stretch="UniformToFill"
                     Opacity="0.35" />
     </Window.Resources>
 
-    <!-- FUNDO DA JANELA -->
     <Grid Background="{StaticResource WindowBackgroundBrush}">
 
         <Grid.ColumnDefinitions>

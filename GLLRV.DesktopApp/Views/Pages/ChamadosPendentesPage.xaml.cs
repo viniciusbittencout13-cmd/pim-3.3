@@ -1,48 +1,19 @@
-using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace GLLRV.DesktopApp.Views.Pages
 {
-    public partial class ChamadosPendentesPage : UserControl
+    public partial class ChamadosPendentesPage : Page
     {
         public ChamadosPendentesPage()
         {
             InitializeComponent();
-            CarregarChamadosFake();
-        }
 
-        private void CarregarChamadosFake()
-        {
-            var lista = new List<ChamadoPendenteItem>
+            // Só pra preencher com dados fake por enquanto
+            ChamadosDataGrid.ItemsSource = new[]
             {
-                new()
-                {
-                    Usuario = "Vinicius",
-                    Prioridade = "Alta",
-                    Dificuldade = "Média",
-                    Data = "05/05/2025",
-                    Horario = "14:30"
-                },
-                new()
-                {
-                    Usuario = "Gustavo",
-                    Prioridade = "Média",
-                    Dificuldade = "Baixa",
-                    Data = "05/05/2025",
-                    Horario = "15:00"
-                }
+                new { Usuario = "Gustavo", NivelPrioridade = "Alto", Dificuldade = "Média", DataAbertura = "11/11/2025", Horario = "15:30" },
+                new { Usuario = "Vinícius", NivelPrioridade = "Médio", Dificuldade = "Baixa", DataAbertura = "11/11/2025", Horario = "16:00" }
             };
-
-            ChamadosGrid.ItemsSource = lista;
-        }
-
-        private class ChamadoPendenteItem
-        {
-            public string Usuario { get; set; } = "";
-            public string Prioridade { get; set; } = "";
-            public string Dificuldade { get; set; } = "";
-            public string Data { get; set; } = "";
-            public string Horario { get; set; } = "";
         }
     }
 }

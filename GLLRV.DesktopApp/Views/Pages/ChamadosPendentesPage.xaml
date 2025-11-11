@@ -8,14 +8,8 @@
              d:DesignWidth="900"
              Background="Transparent">
 
-    <Grid>
-        <!-- Fundo com imagem (coloca o arquivo em Assets/background.png e Build Action = Resource) -->
-        <Grid.Background>
-            <ImageBrush ImageSource="/Assets/background.png"
-                        Stretch="UniformToFill" />
-        </Grid.Background>
-
-        <!-- Área central alinhada com o layout do sistema -->
+    <Grid Background="#F2F4F8">
+        <!-- Área central alinhada -->
         <Grid Margin="260,80,40,40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -38,7 +32,7 @@
             <!-- Grid de chamados -->
             <Border Grid.Row="1"
                     Margin="0,10,0,0"
-                    Background="#F5F5F599"
+                    Background="#FFFFFFCC"
                     CornerRadius="18"
                     Padding="10">
                 <DataGrid x:Name="ChamadosGrid"

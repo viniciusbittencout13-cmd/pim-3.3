@@ -9,72 +9,68 @@ namespace GLLRV.DesktopApp.Views
     public partial class MainWindow : Window
     {
         private readonly Usuario _usuario;
+        private readonly DispatcherTimer _timer;
 
         public MainWindow(Usuario usuario)
         {
+            _usuario = usuario;
             InitializeComponent();
 
-            _usuario = usuario ?? throw new ArgumentNullException(nameof(usuario));
+            // Atualiza título inicial e página inicial
+            PageTitleText.Text = "CHAMADOS PENDENTES";
+            MainContentFrame.Content = new ChamadosPendentesPage();
 
-            // Preenche dados do técnico (se tiver esses campos no Usuario)
-            //UserNameText.Text = _usuario.Username;
-            UserLevelText.Text = $"Técnico - Nível {_usuario.Nivel}";
-            UserCategoryText.Text = $"Categoria: {_usuario.Categoria}";
-
-            // Relógio no canto
-            var timer = new DispatcherTimer
+            // Relógio no topo
+            _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            timer.Tick += (_, _) =>
+            _timer.Tick += (_, __) =>
             {
                 DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
             };
-            timer.Start();
-
-            // Abre Chamados Pendentes padrão
-            AbrirChamadosPendentes();
+            _timer.Start();
         }
-
-        private void UsuariosButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "USUÁRIOS";
-    MainContentFrame.Content = new UsuariosPage(_usuario);
-}
-
-private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "RELATÓRIOS";
-    MainContentFrame.Content = new RelatoriosPage(_usuario);
-}
-
-private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "CHAMADOS PENDENTES";
-    MainContentFrame.Content = new ChamadosPendentesPage(_usuario);
-}
-
-private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "HISTÓRICO DE CHAMADOS";
-    MainContentFrame.Content = new HistoricoChamadosPage(_usuario);
-}
-
-private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "CHAMADOS EM ANDAMENTO";
-    MainContentFrame.Content = new ChamadosAndamentoPage(_usuario);
-}
-
-private void ConfiguracoesButton_Click(object sender, RoutedEventArgs e)
-{
-    PageTitleText.Text = "CONFIGURAÇÕES";
-    MainContentFrame.Content = new ConfiguracoesPage(_usuario);
-}
 
         private void SairButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void UsuariosButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "USUÁRIOS";
+            MainContentFrame.Content = new UsuariosPage();
+        }
+
+        private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "RELATÓRIOS";
+            MainContentFrame.Content = new RelatoriosPage();
+        }
+
+        private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "CHAMADOS PENDENTES";
+            MainContentFrame.Content = new ChamadosPendentesPage();
+        }
+
+        private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "HISTÓRICO DE CHAMADOS";
+            MainContentFrame.Content = new HistoricoChamadosPage();
+        }
+
+        private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "CHAMADOS EM ANDAMENTO";
+            MainContentFrame.Content = new ChamadosAndamentoPage();
+        }
+
+        private void ConfiguracoesButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageTitleText.Text = "CONFIGURAÇÕES";
+            MainContentFrame.Content = new ConfiguracoesPage();
         }
     }
 }

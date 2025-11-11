@@ -41,12 +41,12 @@
                        Margin="0,0,6,0"
                        VerticalAlignment="Center"/>
             <TextBox x:Name="SearchBox"
-                     BorderThickness="0"
-                     Background="Transparent"
-                     VerticalAlignment="Center"
-                     FontSize="12"
-                     PlaceholderText="Buscar por número, cliente ou assunto..."
-                     TextChanged="SearchBox_TextChanged"/>
+         BorderThickness="0"
+         Background="Transparent"
+         VerticalAlignment="Center"
+         FontSize="12"
+         TextChanged="SearchBox_TextChanged"
+         ToolTip="Buscar por número, cliente ou assunto..."/>
         </DockPanel>
     </Border>
 

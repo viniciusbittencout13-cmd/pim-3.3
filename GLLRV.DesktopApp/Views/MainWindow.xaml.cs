@@ -36,40 +36,41 @@ namespace GLLRV.DesktopApp.Views
             AbrirChamadosPendentes();
         }
 
-        private void AbrirChamadosPendentes()
-        {
-            ContentFrame.Content = new ChamadosPendentesPage();
-        }
-
-        private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-        {
-            AbrirChamadosPendentes();
-        }
-
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Content = new UsuariosPage();
-        }
+{
+    PageTitleText.Text = "USUÁRIOS";
+    MainContentFrame.Content = new UsuariosPage(_usuario);
+}
 
-        private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Content = new RelatoriosPage();
-        }
+private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
+{
+    PageTitleText.Text = "RELATÓRIOS";
+    MainContentFrame.Content = new RelatoriosPage(_usuario);
+}
 
-        private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Content = new HistoricoChamadosPage();
-        }
+private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
+{
+    PageTitleText.Text = "CHAMADOS PENDENTES";
+    MainContentFrame.Content = new ChamadosPendentesPage(_usuario);
+}
 
-        private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Content = new ChamadosAndamentoPage();
-        }
+private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
+{
+    PageTitleText.Text = "HISTÓRICO DE CHAMADOS";
+    MainContentFrame.Content = new HistoricoChamadosPage(_usuario);
+}
 
-        private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Content = new ConfiguracaoPage();
-        }
+private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
+{
+    PageTitleText.Text = "CHAMADOS EM ANDAMENTO";
+    MainContentFrame.Content = new ChamadosAndamentoPage(_usuario);
+}
+
+private void ConfiguracoesButton_Click(object sender, RoutedEventArgs e)
+{
+    PageTitleText.Text = "CONFIGURAÇÕES";
+    MainContentFrame.Content = new ConfiguracoesPage(_usuario);
+}
 
         private void SairButton_Click(object sender, RoutedEventArgs e)
         {

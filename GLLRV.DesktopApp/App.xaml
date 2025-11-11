@@ -3,5 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Views/LoginWindow.xaml">
     <Application.Resources>
+<ImageBrush x:Key="AppBackgroundBrush"
+            ImageSource="Assets/gllrv-bg.png"
+            Stretch="UniformToFill"
+            AlignmentX="Center"
+            AlignmentY="Center" />
     </Application.Resources>
 </Application>

@@ -23,9 +23,7 @@ namespace GLLRV.DesktopApp.Views
                 Categoria = "Servidores / Rede"
             };
 
-            CarregarUsuarioNoTopo();
-            IniciarRelogio();
-            AbrirChamadosPendentes();
+            Loaded += MainWindow_Loaded;
         }
 
         public MainWindow()
@@ -37,6 +35,13 @@ namespace GLLRV.DesktopApp.Views
                 Categoria = "Servidores / Rede"
             })
         {
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            CarregarUsuarioNoTopo();
+            IniciarRelogio();
+            AbrirChamadosPendentes();
         }
 
         private void CarregarUsuarioNoTopo()
@@ -74,39 +79,86 @@ namespace GLLRV.DesktopApp.Views
             timer.Start();
         }
 
+        // ---------- Navegação ----------
+
         private void AbrirChamadosPendentes()
         {
-            ContentHost.Content = new ChamadosPendentesPage();
+            try
+            {
+                ContentArea.Children.Clear();
+                ContentArea.Children.Add(new ChamadosPendentesPage());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erro ao abrir Chamados Pendentes:\n{ex.Message}",
+                    "Erro",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
+
+        private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
+            => AbrirChamadosPendentes();
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new UsuariosPage();
+            ContentArea.Children.Clear();
+            ContentArea.Children.Add(new TextBlock
+            {
+                Text = "Usuários (tela em construção)",
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 18
+            });
         }
 
         private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new RelatoriosPage();
-        }
-
-        private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-        {
-            AbrirChamadosPendentes();
+            ContentArea.Children.Clear();
+            ContentArea.Children.Add(new TextBlock
+            {
+                Text = "Relatórios (tela em construção)",
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 18
+            });
         }
 
         private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new HistoricoChamadosPage();
+            ContentArea.Children.Clear();
+            ContentArea.Children.Add(new TextBlock
+            {
+                Text = "Histórico de chamados (tela em construção)",
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 18
+            });
         }
 
         private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new ChamadosAndamentoPage();
+            ContentArea.Children.Clear();
+            ContentArea.Children.Add(new TextBlock
+            {
+                Text = "Chamados em andamento (tela em construção)",
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 18
+            });
         }
 
         private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentHost.Content = new ConfiguracaoPage();
+            ContentArea.Children.Clear();
+            ContentArea.Children.Add(new TextBlock
+            {
+                Text = "Configurações (tela em construção)",
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize = 18
+            });
         }
 
         private void SairButton_Click(object sender, RoutedEventArgs e)

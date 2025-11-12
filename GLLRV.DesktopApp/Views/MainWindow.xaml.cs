@@ -1,76 +1,63 @@
 using System;
 using System.Windows;
 using System.Windows.Threading;
-using GLLRV.DesktopApp.Models;
 using GLLRV.DesktopApp.Views.Pages;
+using GLLRV.DesktopApp.Models; // se quiser preencher infos do usuário
 
 namespace GLLRV.DesktopApp.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly Usuario _usuario;
-        private readonly DispatcherTimer _timer;
+        private readonly DispatcherTimer _clockTimer = new DispatcherTimer();
+        private readonly Usuario? _usuario;
 
-        public MainWindow(Usuario usuario)
+        // Construtor padrão (usado pelo StartupUri) 
+        public MainWindow() : this(null) { }
+
+        // Construtor opcional com usuário (caso o login chame new MainWindow(usuario))
+        public MainWindow(Usuario? usuario)
         {
-            _usuario = usuario;
             InitializeComponent();
+            _usuario = usuario;
 
-            // Atualiza título inicial e página inicial
-            PageTitleText.Text = "CHAMADOS PENDENTES";
-            MainContentFrame.Content = new ChamadosPendentesPage();
-
-            // Relógio no topo
-            _timer = new DispatcherTimer
+            // Preenche infos do cartão (se tiver vindo do login)
+            if (_usuario != null)
             {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _timer.Tick += (_, __) =>
-            {
-                DateTimeText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
-            };
-            _timer.Start();
-        }
+                // Ajuste estes campos se quiser exibir outros dados
+                UserLevelText.Text = $"Técnico - Nível {_usuario.Nivel}";
+                UserCategoryText.Text = _usuario.Categoria ?? "Categoria";
+            }
 
-        private void SairButton_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
+            // Página inicial
+            MainContentFrame.Navigate(new ChamadosPendentesPage());
+
+            // Relógio
+            _clockTimer.Interval = TimeSpan.FromSeconds(1);
+            _clockTimer.Tick += (_, __) =>
+                ClockText.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
+            _clockTimer.Start();
         }
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "USUÁRIOS";
-            MainContentFrame.Content = new UsuariosPage();
-        }
+            => MainContentFrame.Navigate(new UsuariosPage());
 
         private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "RELATÓRIOS";
-            MainContentFrame.Content = new RelatoriosPage();
-        }
+            => MainContentFrame.Navigate(new RelatoriosPage());
 
         private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "CHAMADOS PENDENTES";
-            MainContentFrame.Content = new ChamadosPendentesPage();
-        }
+            => MainContentFrame.Navigate(new ChamadosPendentesPage());
 
         private void HistoricoChamadosButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "HISTÓRICO DE CHAMADOS";
-            MainContentFrame.Content = new HistoricoChamadosPage();
-        }
+            => MainContentFrame.Navigate(new HistoricoChamadosPage());
 
         private void ChamadosAndamentoButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "CHAMADOS EM ANDAMENTO";
-            MainContentFrame.Content = new ChamadosAndamentoPage();
-        }
+            => MainContentFrame.Navigate(new ChamadosAndamentoPage());
 
-        private void ConfiguracoesButton_Click(object sender, RoutedEventArgs e)
-        {
-            PageTitleText.Text = "CONFIGURAÇÕES";
-            MainContentFrame.Content = new ConfiguracaoPage();
-        }
+        // Faltava esse handler no seu build
+        private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
+            => MainContentFrame.Navigate(new ConfiguracoesPage());
+
+        private void SairButton_Click(object sender, RoutedEventArgs e)
+            => Close();
     }
 }

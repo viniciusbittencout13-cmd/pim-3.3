@@ -1,11 +1,14 @@
-<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ConfiguracaoPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ConfiguracoesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d">
     <Grid>
         <TextBlock Text="Configurações (em construção)"
-                   VerticalAlignment="Center"
+                   FontSize="16"
+                   Foreground="#222"
                    HorizontalAlignment="Center"
-                   FontSize="18"/>
+                   VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

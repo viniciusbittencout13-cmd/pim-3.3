@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace GLLRV.DesktopApp.Views.Pages
 {
-    public partial class ConfiguracaoPage : UserControl
+    public partial class ConfiguracoesPage : UserControl
     {
-        public ConfiguracaoPage()
+        public ConfiguracoesPage()
         {
             InitializeComponent();
         }

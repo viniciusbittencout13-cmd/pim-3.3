@@ -8,6 +8,7 @@ namespace GLLRV.DesktopApp.Views.Pages
         public ChamadosAndamentoPage()
         {
             InitializeComponent();
+            // DataGrid DE ANDAMENTO
             ChamadosGrid.ItemsSource = JsonDataStore.GetAndamento();
         }
     }

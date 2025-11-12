@@ -8,7 +8,8 @@ namespace GLLRV.DesktopApp.Views.Pages
         public HistoricoChamadosPage()
         {
             InitializeComponent();
-            ChamadosGrid.ItemsSource = JsonDataStore.GetHistorico();
+            // DataGrid DO HISTÓRICO
+            HistoricoGrid.ItemsSource = JsonDataStore.GetHistorico();
         }
     }
 }

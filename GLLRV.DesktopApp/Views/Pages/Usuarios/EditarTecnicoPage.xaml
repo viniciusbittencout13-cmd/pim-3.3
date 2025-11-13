@@ -59,7 +59,7 @@
 
                 <!-- NOME / TELEFONE -->
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="NOME E SOBRENOME" Margin="0,8,0,4"/>
-                <TextBox x:Name="NomeUsuarioTextBox"
+                <TextBox x:Name="NomeTextBox"
                          Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" Height="30"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="1" Text="TELEFONE" Margin="10,8,0,4"/>
@@ -82,7 +82,7 @@
 
                 <!-- NOME DE USUÁRIO -->
                 <TextBlock Grid.Row="7" Grid.Column="0" Text="NOME DE USUÁRIO" Margin="0,8,0,4"/>
-                <TextBox x:Name="UserNameTextBox"
+                <TextBox x:Name="NameUsuarioTextBox"
                          Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" Height="30"/>
 
                 <!-- SENHA PRIMEIRO ACESSO -->

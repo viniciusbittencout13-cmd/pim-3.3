@@ -16,7 +16,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
         }
 
         // Botão que BUSCA o técnico (pode ser por CPF ou usuário – adaptei para CPF)
-        private void BuscarButton_Click(object sender, RoutedEventArgs e)
+        private void CarregarButton_Click(object sender, RoutedEventArgs e)
         {
             var cpf = CpfTextBox.Text.Trim();
 

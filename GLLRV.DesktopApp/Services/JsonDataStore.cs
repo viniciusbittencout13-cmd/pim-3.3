@@ -25,9 +25,9 @@ namespace GLLRV.DesktopApp.Services
             if (!Directory.Exists(BaseDir))
                 Directory.CreateDirectory(BaseDir);
 
+            // Se o arquivo não existe, cria com alguns chamados base
             if (!File.Exists(ChamadosFile))
             {
-                // alguns chamados fake só pra lista não ficar vazia
                 var seed = new List<Chamado>
                 {
                     new()
@@ -65,6 +65,9 @@ namespace GLLRV.DesktopApp.Services
 
                 SaveChamados(seed);
             }
+
+            // Sempre garante os 3 chamados fechados (Vinicius, Gustavo, Ralyson)
+            EnsureHistoricoBase();
         }
 
         public static List<Chamado> LoadChamados()
@@ -94,5 +97,67 @@ namespace GLLRV.DesktopApp.Services
 
         public static IEnumerable<Chamado> GetHistorico() =>
             LoadChamados().Where(c => c.Status.Equals("Fechado", StringComparison.OrdinalIgnoreCase));
+
+        // ---------- NOVO: garante 3 chamados fechados no histórico ----------
+        private static void EnsureHistoricoBase()
+        {
+            var list = LoadChamados();
+
+            bool hasVini   = list.Any(c => c.Status == "Fechado" && c.Responsavel.Equals("Vinicius", StringComparison.OrdinalIgnoreCase));
+            bool hasGus    = list.Any(c => c.Status == "Fechado" && c.Responsavel.Equals("Gustavo",  StringComparison.OrdinalIgnoreCase));
+            bool hasRaly   = list.Any(c => c.Status == "Fechado" && c.Responsavel.Equals("Ralyson",  StringComparison.OrdinalIgnoreCase));
+
+            if (hasVini && hasGus && hasRaly)
+                return;
+
+            int nextId = list.Any() ? list.Max(c => c.Id) + 1 : 1;
+
+            if (!hasVini)
+            {
+                list.Add(new Chamado
+                {
+                    Id = nextId++,
+                    Titulo = "Restabelecimento de acesso Wi-Fi",
+                    Descricao = "Ajuste de política e rotação de senha.",
+                    Status = "Fechado",
+                    Responsavel = "Vinicius",
+                    Solicitante = "Andar 3",
+                    DataAbertura = new DateTime(2025, 11, 10, 9, 15, 0),
+                    DataFechamento = new DateTime(2025, 11, 10, 10, 15, 0)
+                });
+            }
+
+            if (!hasGus)
+            {
+                list.Add(new Chamado
+                {
+                    Id = nextId++,
+                    Titulo = "Atualização de drivers estação CAD",
+                    Descricao = "Driver de GPU e pacote DirectX.",
+                    Status = "Fechado",
+                    Responsavel = "Gustavo",
+                    Solicitante = "Engenharia",
+                    DataAbertura = new DateTime(2025, 11, 11, 13, 30, 0),
+                    DataFechamento = new DateTime(2025, 11, 11, 14, 45, 0)
+                });
+            }
+
+            if (!hasRaly)
+            {
+                list.Add(new Chamado
+                {
+                    Id = nextId++,
+                    Titulo = "Correção de perfil no Outlook",
+                    Descricao = "Recriado perfil e reindexado pesquisa.",
+                    Status = "Fechado",
+                    Responsavel = "Ralyson",
+                    Solicitante = "Comercial",
+                    DataAbertura = new DateTime(2025, 11, 9, 8, 30, 0),
+                    DataFechamento = new DateTime(2025, 11, 9, 9, 0, 0)
+                });
+            }
+
+            SaveChamados(list);
+        }
     }
 }

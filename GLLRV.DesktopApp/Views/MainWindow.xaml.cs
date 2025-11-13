@@ -42,7 +42,7 @@ namespace GLLRV.DesktopApp.Views
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
             => MainContentFrame.Navigate(new UsuariosPage());
 
-        private void RelatoriosButton_Click(object sender, RoutedEventArgs e)
+        public void RelatoriosButton_Click(object sender, RoutedEventArgs e)
             => MainContentFrame.Navigate(new RelatoriosPage());
 
         private void ChamadosPendentesButton_Click(object sender, RoutedEventArgs e)

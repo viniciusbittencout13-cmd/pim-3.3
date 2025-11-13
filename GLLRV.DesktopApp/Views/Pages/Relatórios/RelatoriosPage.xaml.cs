@@ -1,32 +1,28 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
-namespace GLLRV.DesktopApp.Views.Pages
+namespace GLLRV.DesktopApp.Views.Pages.Relatorios
 {
     public partial class RelatoriosPage : UserControl
     {
-        public RelatoriosPage()
+        public RelatoriosPage() => InitializeComponent();
+
+        private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
         {
-            InitializeComponent();
+            var p = VisualTreeHelper.GetParent(child);
+            while (p != null && p is not T) p = VisualTreeHelper.GetParent(p);
+            return p as T;
+        }
+        private void Go(UserControl page)
+        {
+            var frame = FindParent<Frame>(this);
+            if (frame != null) frame.Content = page;
         }
 
-        private void Tempo_Click(object sender, RoutedEventArgs e) =>
-            Navigate(new RelatorioGenericoPage("TEMPO DE ATENDIMENTO"));
-
-        private void AvaliacaoAtend_Click(object sender, RoutedEventArgs e) =>
-            Navigate(new RelatorioGenericoPage("AVALIAÇÃO DOS ATENDIMENTOS"));
-
-        private void AvaliacaoTec_Click(object sender, RoutedEventArgs e) =>
-            Navigate(new RelatorioGenericoPage("AVALIAÇÃO DOS TÉCNICOS"));
-
-        private void Atendimentos_Click(object sender, RoutedEventArgs e) =>
-            Navigate(new RelatorioGenericoPage("ATENDIMENTOS"));
-
-        // Usa o método do MainWindow para trocar o conteúdo do frame
-        private void Navigate(UserControl page)
-        {
-            var mw = Application.Current.MainWindow as MainWindow;
-            mw?.Navigate(page);
-        }
+        private void Atendimentos_Click(object s, RoutedEventArgs e) => Go(new RelatorioAtendimentosPage());
+        private void TempoAtendimento_Click(object s, RoutedEventArgs e) => Go(new RelatorioTempoAtendimentoPage());
+        private void AvaliacaoAtendimento_Click(object s, RoutedEventArgs e) => Go(new RelatorioAvaliacaoAtendimentoPage());
+        private void AvaliacaoTecnicos_Click(object s, RoutedEventArgs e) => Go(new RelatorioAvaliacaoTecnicosPage());
     }
 }

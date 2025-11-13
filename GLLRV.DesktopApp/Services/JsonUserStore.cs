@@ -23,29 +23,27 @@ namespace GLLRV.DesktopApp.Services
             _filePath = Path.Combine(dataDir, "usuarios.json");
         }
 
-        // =======================
+        // =========================
         // SEED: cria usuário padrão
-        // =======================
+        // =========================
         public static void EnsureSeedUser()
         {
             var store = new JsonUserStore();
             var usuarios = store.LoadAllInternal();
 
+            // se já tiver alguém cadastrado, não faz nada
             if (usuarios.Any())
                 return;
 
             var usuarioPadrao = new Usuario
             {
-                Username = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                // se o seu Nivel for string, ok; se for int, mude para 2
-                Nivel = "Nível 2",
-                Categoria = "Servidores / Rede",
-                // IMPORTANTE: tipo de usuário para validar Nível 2 técnico
-                Tipo = "Tecnico",
-                PasswordHash = HashPassword("admin"),
+                Username      = "vinicius",
+                NomeCompleto  = "Vinicius Bittencourt",
+                Nivel         = "Nível 2",
+                Categoria     = "Servidores / Rede",
+                PasswordHash  = HashPassword("admin"),  // senha inicial
                 PrimeiroAcesso = true,
-                Ativo = true,
+                Ativo          = true,
                 FraseSeguranca = "primeiro acesso"
             };
 
@@ -53,20 +51,23 @@ namespace GLLRV.DesktopApp.Services
             store.SaveAllInternal(usuarios);
         }
 
-        // =======================
+        // =========================
         // LOGIN
-        // =======================
+        // =========================
         public Usuario? ValidarLogin(string username, string senha)
         {
             var usuarios = LoadAllInternal();
             var senhaHash = HashPassword(senha);
 
             return usuarios.FirstOrDefault(u =>
-                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)
-                && u.PasswordHash == senhaHash
-                && u.Ativo);
+                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+                u.PasswordHash == senhaHash &&
+                u.Ativo);
         }
 
+        // =========================
+        // CONSULTA / UPDATE
+        // =========================
         public Usuario? GetByUsername(string username)
         {
             return LoadAllInternal()
@@ -86,19 +87,21 @@ namespace GLLRV.DesktopApp.Services
             }
             else
             {
-                existing.NomeCompleto = usuario.NomeCompleto;
-                existing.Nivel = usuario.Nivel;
-                existing.Categoria = usuario.Categoria;
-                existing.PasswordHash = usuario.PasswordHash;
+                existing.NomeCompleto   = usuario.NomeCompleto;
+                existing.Nivel          = usuario.Nivel;
+                existing.Categoria      = usuario.Categoria;
+                existing.PasswordHash   = usuario.PasswordHash;
                 existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
-                existing.Ativo = usuario.Ativo;
+                existing.Ativo          = usuario.Ativo;
                 existing.FraseSeguranca = usuario.FraseSeguranca;
-                existing.Tipo = usuario.Tipo;
             }
 
             SaveAllInternal(usuarios);
         }
 
+        // =========================
+        // INTERNOS: carregar / salvar
+        // =========================
         private List<Usuario> LoadAllInternal()
         {
             if (!File.Exists(_filePath))
@@ -119,6 +122,9 @@ namespace GLLRV.DesktopApp.Services
             File.WriteAllText(_filePath, json);
         }
 
+        // =========================
+        // HASH DE SENHA
+        // =========================
         public static string HashPassword(string password)
         {
             using var sha = SHA256.Create();

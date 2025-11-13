@@ -1,16 +1,14 @@
 using System.Windows;
 using System.Windows.Controls;
-using GLLRV.DesktopApp.Services;
-using GLLRV.DesktopApp.Views.Pages;
 using GLLRV.DesktopApp.Models;
+using GLLRV.DesktopApp.Services;
 
 namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {
     public partial class CadastroTecnicoPage : UserControl
     {
-        private readonly UsuarioStorage _storage = new UsuarioStorage();
-        private readonly JsonUserStore _userStore = new JsonUserStore(); // <-- NOVO
-        
+        private readonly JsonUserStore _userStore = new JsonUserStore();
+
         public CadastroTecnicoPage()
         {
             InitializeComponent();
@@ -18,32 +16,23 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 
         private void CadastrarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(NomeTextBox.Text) ||
-                string.IsNullOrWhiteSpace(CpfTextBox.Text) ||
-                string.IsNullOrWhiteSpace(UserNameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(SenhaPasswordBox.Password))
-            {
-                MessageBox.Show("Preencha pelo menos Nome, CPF, Usuário e Senha.",
-                    "Campos obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            var nivel = (NivelComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "1";
-
+            // 1) Monta o objeto do técnico (arquivo tecnicos.json)
             var tecnico = new TecnicoInfo
             {
-                NomeCompleto        = NomeTextBox.Text.Trim(),
                 Cpf                 = CpfTextBox.Text.Trim(),
+                NomeCompleto        = NomeTextBox.Text.Trim(),
                 Telefone            = TelefoneTextBox.Text.Trim(),
-                NivelTecnico        = nivel,
-                NomeUsuario         = UserNameTextBox.Text.Trim(),
+                NivelTecnico        = NivelComboBox.Text,
+                NomeUsuario         = NomeUsuarioTextBox.Text.Trim(),
                 SenhaPrimeiroAcesso = SenhaPasswordBox.Password,
                 Email               = EmailTextBox.Text.Trim(),
-                CategoriaChamados   = CategoriaTextBox.Text.Trim()
+                CategoriaChamados   = CategoriaComboBox.Text
             };
 
-            UsuarioStorage.AddOrUpdateTecnico(tecnico);
+            // Salva/atualiza no tecnicos.json (classe ESTÁTICA)
+            UsuarioStorage.SalvarOuAtualizarTecnico(tecnico);
 
+            // 2) Cria/atualiza o usuário de login em usuarios.json
             var usuario = new Usuario
             {
                 Username       = tecnico.NomeUsuario,
@@ -59,30 +48,13 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 
             _userStore.Update(usuario);
 
-            MessageBox.Show("Técnico cadastrado com sucesso!",
-                "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            LimparCampos();
-        }
-
-        private void LimparCampos()
-        {
-            NomeTextBox.Text = "";
-            TelefoneTextBox.Text = "";
-            CpfTextBox.Text = "";
-            UserNameTextBox.Text = "";
-            SenhaPasswordBox.Password = "";
-            EmailTextBox.Text = "";
-            CategoriaTextBox.Text = "";
-            NivelComboBox.SelectedIndex = -1;
+            MessageBox.Show("Técnico cadastrado com sucesso!", "Sucesso",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Window.GetWindow(this) is MainWindow main)
-            {
-                main.MainContentFrame.Navigate(new UsuariosPage());
-            }
+            // Se quiser, limpa os campos aqui
         }
     }
 }

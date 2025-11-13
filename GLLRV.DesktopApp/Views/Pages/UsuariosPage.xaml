@@ -1,11 +1,60 @@
 <UserControl x:Class="GLLRV.DesktopApp.Views.Pages.UsuariosPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root"
+             Tag="USUÁRIOS">
+    <Grid Margin="40,32,40,32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-    <Grid>
-        <TextBlock Text="Gestão de usuários (em construção)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="18"/>
+        <!-- Título grande dentro da área de conteúdo -->
+        <TextBlock Grid.Row="0"
+                   Text="USUÁRIOS"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Margin="0,0,0,24"/>
+
+        <!-- Cartão central com botões -->
+        <Border Grid.Row="1"
+                CornerRadius="22"
+                Background="#B3FFFFFF"
+                Padding="40"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Width="540">
+            <StackPanel VerticalAlignment="Center">
+                <Button Content="CADASTRO DO CLIENTE"
+                        Height="40"
+                        Margin="0,0,0,12"
+                        Click="CadastroClienteButton_Click"/>
+
+                <Button Content="CADASTRO DO TÉCNICO"
+                        Height="40"
+                        Margin="0,0,0,12"
+                        Click="CadastroTecnicoButton_Click"/>
+
+                <Button Content="EDITAR CADASTRO CLIENTE"
+                        Height="40"
+                        Margin="0,0,0,12"
+                        Click="EditarClienteButton_Click"/>
+
+                <Button Content="EDITAR CADASTRO TÉCNICO"
+                        Height="40"
+                        Margin="0,0,0,12"
+                        Click="EditarTecnicoButton_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Botão voltar (para a tela inicial de chamados pendentes) -->
+        <Button Grid.Row="2"
+                Content="VOLTAR"
+                Width="120"
+                Height="36"
+                HorizontalAlignment="Left"
+                Margin="0,24,0,0"
+                Click="VoltarButton_Click"/>
     </Grid>
 </UserControl>

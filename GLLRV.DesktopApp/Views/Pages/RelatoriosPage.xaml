@@ -1,11 +1,22 @@
 <UserControl x:Class="GLLRV.DesktopApp.Views.Pages.RelatoriosPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <Grid>
-        <TextBlock Text="Relatórios (em construção)"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="18"/>
+        <TextBlock Text="RELATÓRIOS" FontSize="20" FontWeight="Bold" />
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" Width="420" HorizontalAlignment="Left" Spacing="12">
+            <Button Content="TEMPO MÉDIO DE ATENDIMENTO" Height="42" Click="Tempo_Click"/>
+            <Button Content="AVALIAÇÃO DOS ATENDIMENTOS"  Height="42" Click="AvaliacaoAtend_Click"/>
+            <Button Content="AVALIAÇÃO DOS TÉCNICOS"      Height="42" Click="AvaliacaoTec_Click"/>
+            <Button Content="ATENDIMENTOS"                 Height="42" Click="Atendimentos_Click"/>
+        </StackPanel>
     </Grid>
 </UserControl>

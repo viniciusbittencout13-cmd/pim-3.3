@@ -3,34 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Services
 {
-    // Técnico da área de suporte
-    public class TecnicoInfo
-    {
-        public string Cpf { get; set; } = "";
-        public string NomeCompleto { get; set; } = "";
-        public string Telefone { get; set; } = "";
-        public string NivelTecnico { get; set; } = "";
-        public string NomeUsuario { get; set; } = "";
-        public string SenhaPrimeiroAcesso { get; set; } = "";
-        public string Email { get; set; } = "";
-        public string CategoriaChamados { get; set; } = "";
-    }
-
-    // Cliente (usuário final)
-    public class ClienteInfo
-    {
-        public string Cpf { get; set; } = "";
-        public string NomeCompleto { get; set; } = "";
-        public string Telefone { get; set; } = "";
-        public string Funcao { get; set; } = "";
-        public string NomeUsuario { get; set; } = "";
-        public string SenhaPrimeiroAcesso { get; set; } = "";
-        public string Email { get; set; } = "";
-    }
-
     public static class UsuarioStorage
     {
         private static readonly string BaseDir =
@@ -53,15 +29,15 @@ namespace GLLRV.DesktopApp.Services
                 Directory.CreateDirectory(BaseDir);
 
             if (!File.Exists(TecnicosFile))
-                SaveTecnicos(new List<TecnicoInfo>());
+                File.WriteAllText(TecnicosFile, "[]");
 
             if (!File.Exists(ClientesFile))
-                SaveClientes(new List<ClienteInfo>());
+                File.WriteAllText(ClientesFile, "[]");
         }
 
-        // --------- Técnicos ---------
+        // ----------------- TÉCNICOS -----------------
 
-        public static List<TecnicoInfo> LoadTecnicos()
+        public static List<TecnicoInfo> CarregarTecnicos()
         {
             if (!File.Exists(TecnicosFile))
                 return new List<TecnicoInfo>();
@@ -71,46 +47,58 @@ namespace GLLRV.DesktopApp.Services
                    ?? new List<TecnicoInfo>();
         }
 
-        public static void SaveTecnicos(List<TecnicoInfo> lista)
+        public static void SalvarTecnicos(List<TecnicoInfo> tecnicos)
         {
             if (!Directory.Exists(BaseDir))
                 Directory.CreateDirectory(BaseDir);
 
-            var json = JsonSerializer.Serialize(lista, JsonOptions);
+            var json = JsonSerializer.Serialize(tecnicos, JsonOptions);
             File.WriteAllText(TecnicosFile, json);
         }
 
-        public static void AddOrUpdateTecnico(TecnicoInfo tecnico)
+        // Usado no cadastro e na edição
+        public static void SalvarOuAtualizarTecnico(TecnicoInfo tecnico)
         {
-            var lista = LoadTecnicos();
+            var lista = CarregarTecnicos();
 
-            var existente = lista.FirstOrDefault(t => t.Cpf == tecnico.Cpf);
+            var existente = lista.FirstOrDefault(t =>
+                t.Cpf.Equals(tecnico.Cpf, StringComparison.OrdinalIgnoreCase));
+
             if (existente == null)
             {
                 lista.Add(tecnico);
             }
             else
             {
-                existente.NomeCompleto       = tecnico.NomeCompleto;
-                existente.Telefone           = tecnico.Telefone;
-                existente.NivelTecnico       = tecnico.NivelTecnico;
-                existente.NomeUsuario        = tecnico.NomeUsuario;
+                existente.NomeCompleto        = tecnico.NomeCompleto;
+                existente.Telefone            = tecnico.Telefone;
+                existente.NivelTecnico        = tecnico.NivelTecnico;
+                existente.NomeUsuario         = tecnico.NomeUsuario;
                 existente.SenhaPrimeiroAcesso = tecnico.SenhaPrimeiroAcesso;
-                existente.Email              = tecnico.Email;
-                existente.CategoriaChamados  = tecnico.CategoriaChamados;
+                existente.Email               = tecnico.Email;
+                existente.CategoriaChamados   = tecnico.CategoriaChamados;
             }
 
-            SaveTecnicos(lista);
+            SalvarTecnicos(lista);
         }
 
-        public static TecnicoInfo? GetTecnicoPorCpf(string cpf)
+        public static TecnicoInfo? ObterTecnicoPorCpf(string cpf)
         {
-            return LoadTecnicos().FirstOrDefault(t => t.Cpf == cpf);
+            return CarregarTecnicos()
+                .FirstOrDefault(t =>
+                    t.Cpf.Equals(cpf, StringComparison.OrdinalIgnoreCase));
         }
 
-        // --------- Clientes ---------
+        public static TecnicoInfo? ObterTecnicoPorNomeUsuario(string username)
+        {
+            return CarregarTecnicos()
+                .FirstOrDefault(t =>
+                    t.NomeUsuario.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
 
-        public static List<ClienteInfo> LoadClientes()
+        // ----------------- CLIENTES -----------------
+
+        public static List<ClienteInfo> CarregarClientes()
         {
             if (!File.Exists(ClientesFile))
                 return new List<ClienteInfo>();
@@ -120,40 +108,15 @@ namespace GLLRV.DesktopApp.Services
                    ?? new List<ClienteInfo>();
         }
 
-        public static void SaveClientes(List<ClienteInfo> lista)
+        public static void SalvarClientes(List<ClienteInfo> clientes)
         {
             if (!Directory.Exists(BaseDir))
                 Directory.CreateDirectory(BaseDir);
 
-            var json = JsonSerializer.Serialize(lista, JsonOptions);
+            var json = JsonSerializer.Serialize(clientes, JsonOptions);
             File.WriteAllText(ClientesFile, json);
         }
 
-        public static void AddOrUpdateCliente(ClienteInfo cliente)
-        {
-            var lista = LoadClientes();
-
-            var existente = lista.FirstOrDefault(t => t.Cpf == cliente.Cpf);
-            if (existente == null)
-            {
-                lista.Add(cliente);
-            }
-            else
-            {
-                existente.NomeCompleto        = cliente.NomeCompleto;
-                existente.Telefone            = cliente.Telefone;
-                existente.Funcao              = cliente.Funcao;
-                existente.NomeUsuario         = cliente.NomeUsuario;
-                existente.SenhaPrimeiroAcesso = cliente.SenhaPrimeiroAcesso;
-                existente.Email               = cliente.Email;
-            }
-
-            SaveClientes(lista);
-        }
-
-        public static ClienteInfo? GetClientePorCpf(string cpf)
-        {
-            return LoadClientes().FirstOrDefault(c => c.Cpf == cpf);
-        }
+        // Se quiser, depois podemos criar SalvarOuAtualizarCliente, ObterClientePorCpf etc.
     }
 }

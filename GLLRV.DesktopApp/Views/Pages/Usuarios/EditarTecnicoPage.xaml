@@ -59,7 +59,7 @@
 
                 <!-- NOME / TELEFONE -->
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="NOME E SOBRENOME" Margin="0,8,0,4"/>
-                <TextBox x:Name="NomeTextBox"
+                <TextBox x:Name="NomeUsuarioTextBox"
                          Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" Height="30"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="1" Text="TELEFONE" Margin="10,8,0,4"/>

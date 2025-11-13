@@ -5,7 +5,7 @@ using GLLRV.DesktopApp.Views.Pages.Relatorios; // <-- onde está a RelatoriosPag
 
 namespace GLLRV.DesktopApp.Views.Pages.Relatorios
 {
-    public partial class RelatorioGenericoPage : Page
+    public partial class RelatorioGenericoPage : UserControl
     {
         private readonly string _titulo;
 

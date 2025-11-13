@@ -10,9 +10,12 @@ namespace GLLRV.DesktopApp.Views
         private readonly JsonUserStore _store = new JsonUserStore();
 
         public LoginWindow()
-        {
-            InitializeComponent();
-        }
+{
+    InitializeComponent();
+
+    // Garante que exista pelo menos 1 usuário (vinicius/admin)
+    JsonUserStore.EnsureSeedUser();
+}
 
         private void EntrarButton_Click(object sender, RoutedEventArgs e)
         {

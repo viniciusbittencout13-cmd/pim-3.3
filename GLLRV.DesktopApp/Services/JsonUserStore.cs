@@ -2,107 +2,92 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Services
 {
-    public class JsonUserStore
+    public static class JsonUserStore
     {
-        private readonly string _filePath;
+        private static readonly string BaseDir =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
 
-        public JsonUserStore()
+        private static readonly string UsersFile =
+            Path.Combine(BaseDir, "usuarios.json");
+
+        private static readonly JsonSerializerOptions JsonOptions = new()
         {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var dataDir = Path.Combine(baseDir, "data");
-            if (!Directory.Exists(dataDir))
-                Directory.CreateDirectory(dataDir);
+            WriteIndented = true
+        };
 
-            _filePath = Path.Combine(dataDir, "usuarios.json");
-        }
-
-        public static void EnsureSeedUser()
+        static JsonUserStore()
         {
-            var store = new JsonUserStore();
-            var usuarios = store.LoadAllInternal();
+            if (!Directory.Exists(BaseDir))
+                Directory.CreateDirectory(BaseDir);
 
-            if (usuarios.Any())
-                return;
-
-            var usuarioPadrao = new Usuario
+            if (!File.Exists(UsersFile))
             {
-                Username = "vinicius",
-                NomeCompleto = "Vinicius Bittencourt",
-                Nivel = "Nível 2",
-                Categoria = "Servidores / Rede",
-                PasswordHash = HashPassword("admin"),
-                PrimeiroAcesso = true,
-                Ativo = true
-            };
+                // SEED: cria um técnico nível 2 e um cliente
+                var seed = new List<Usuario>
+                {
+                    new()
+                    {
+                        Id = 1,
+                        NomeCompleto = "Vinicius Técnico",
+                        Username = "vinicius",
+                        Tipo = "Tecnico",
+                        Nivel = 2,
+                        Categoria = "Servidores / Rede",
+                        PasswordHash = "1234",         // por enquanto simples
+                        FraseSeguranca = "primeiro acesso"
+                    },
+                    new()
+                    {
+                        Id = 2,
+                        NomeCompleto = "Cliente Teste",
+                        Username = "cliente",
+                        Tipo = "Cliente",
+                        Nivel = 0,
+                        Categoria = "Usuário Final",
+                        PasswordHash = "1234",
+                        FraseSeguranca = "primeiro acesso"
+                    }
+                };
 
-            usuarios.Add(usuarioPadrao);
-            store.SaveAllInternal(usuarios);
-        }
-
-        public Usuario GetByUsername(string username)
-        {
-            return LoadAllInternal()
-                .FirstOrDefault(u =>
-                    u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void Update(Usuario usuario)
-        {
-            var usuarios = LoadAllInternal();
-            var existing = usuarios.FirstOrDefault(u =>
-                u.Username.Equals(usuario.Username, StringComparison.OrdinalIgnoreCase));
-
-            if (existing == null)
-            {
-                usuarios.Add(usuario);
+                SaveUsuarios(seed);
             }
-            else
-            {
-                existing.NomeCompleto = usuario.NomeCompleto;
-                existing.Nivel = usuario.Nivel;
-                existing.Categoria = usuario.Categoria;
-                existing.PasswordHash = usuario.PasswordHash;
-                existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
-                existing.Ativo = usuario.Ativo;
-                existing.FraseSeguranca = usuario.FraseSeguranca;
-            }
-
-            SaveAllInternal(usuarios);
         }
 
-        private List<Usuario> LoadAllInternal()
+        public static List<Usuario> LoadUsuarios()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(UsersFile))
                 return new List<Usuario>();
 
-            var json = File.ReadAllText(_filePath);
-            if (string.IsNullOrWhiteSpace(json))
-                return new List<Usuario>();
-
-            return JsonSerializer.Deserialize<List<Usuario>>(json)
+            var json = File.ReadAllText(UsersFile);
+            return JsonSerializer.Deserialize<List<Usuario>>(json, JsonOptions)
                    ?? new List<Usuario>();
         }
 
-        private void SaveAllInternal(List<Usuario> usuarios)
+        public static void SaveUsuarios(List<Usuario> usuarios)
         {
-            var json = JsonSerializer.Serialize(usuarios,
-                new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(_filePath, json);
+            if (!Directory.Exists(BaseDir))
+                Directory.CreateDirectory(BaseDir);
+
+            var json = JsonSerializer.Serialize(usuarios, JsonOptions);
+            File.WriteAllText(UsersFile, json);
         }
 
-        public static string HashPassword(string password)
+        /// <summary>
+        /// Valida login pelo username e senha.
+        /// Retorna o usuário ou null se não encontrar.
+        /// </summary>
+        public static Usuario? ValidarLogin(string username, string senha)
         {
-            using var sha = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha.ComputeHash(bytes);
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            var usuarios = LoadUsuarios();
+
+            return usuarios.FirstOrDefault(u =>
+                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)
+                && u.PasswordHash == senha);
         }
     }
 }

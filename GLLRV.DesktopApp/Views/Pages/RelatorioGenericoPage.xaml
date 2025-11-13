@@ -1,0 +1,75 @@
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.RelatorioGenericoPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Título -->
+        <TextBlock x:Name="ReportTitleText"
+                   FontSize="18" FontWeight="Bold"
+                   Text="RELATÓRIO"
+                   Margin="0,0,0,12"/>
+
+        <!-- Filtros -->
+        <Border Grid.Row="1" Padding="10" CornerRadius="6" Background="#0F000000" Margin="0,0,0,12">
+            <UniformGrid Columns="6" Rows="2" Margin="0" HorizontalAlignment="Stretch">
+                <StackPanel Margin="6">
+                    <TextBlock Text="DE" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <DatePicker x:Name="DpDe" SelectedDateChanged="OnFilterChanged"/>
+                </StackPanel>
+                <StackPanel Margin="6">
+                    <TextBlock Text="ATÉ" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <DatePicker x:Name="DpAte" SelectedDateChanged="OnFilterChanged"/>
+                </StackPanel>
+                <StackPanel Margin="6">
+                    <TextBlock Text="PERÍODOS DO DIA" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="CbPeriodo" SelectionChanged="OnFilterChanged">
+                        <ComboBoxItem Content="Todos" IsSelected="True"/>
+                        <ComboBoxItem Content="Manhã (00-12)"/>
+                        <ComboBoxItem Content="Tarde (12-18)"/>
+                        <ComboBoxItem Content="Noite (18-24)"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="6">
+                    <TextBlock Text="CATEGORIA CHAMADO" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="CbCategoria" SelectionChanged="OnFilterChanged">
+                        <ComboBoxItem Content="Todas" IsSelected="True"/>
+                        <ComboBoxItem Content="Infraestrutura"/>
+                        <ComboBoxItem Content="Redes"/>
+                        <ComboBoxItem Content="Aplicações"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="6">
+                    <TextBlock Text="NÍVEL DE PRIORIDADE" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="CbPrioridade" SelectionChanged="OnFilterChanged">
+                        <ComboBoxItem Content="Todos" IsSelected="True"/>
+                        <ComboBoxItem Content="Baixa"/>
+                        <ComboBoxItem Content="Média"/>
+                        <ComboBoxItem Content="Alta"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="6">
+                    <TextBlock Text="TÉCNICO RESPONSÁVEL" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="CbTecnico" SelectionChanged="OnFilterChanged"/>
+                </StackPanel>
+            </UniformGrid>
+        </Border>
+
+        <!-- Área do gráfico -->
+        <Border Grid.Row="2" CornerRadius="10" Background="#0A000000" Padding="10">
+            <Canvas x:Name="ChartArea" />
+        </Border>
+
+        <!-- Rodapé -->
+        <DockPanel Grid.Row="3" Margin="0,12,0,0">
+            <Button Content="VOLTAR" Width="140" Height="36" Click="Voltar_Click" />
+            <Button Content="EXPORTAR" Width="140" Height="36" Click="Exportar_Click"
+                    DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+        </DockPanel>
+    </Grid>
+</UserControl>

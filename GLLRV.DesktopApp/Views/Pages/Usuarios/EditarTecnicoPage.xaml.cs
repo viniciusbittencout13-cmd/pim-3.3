@@ -1,22 +1,25 @@
 using System.Windows;
 using System.Windows.Controls;
-using GLLRV.DesktopApp.Services;
-using GLLRV.DesktopApp.Views.Pages;
 using GLLRV.DesktopApp.Models;
+using GLLRV.DesktopApp.Services;
 
 namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {
-    private readonly JsonUserStore _userStore = new JsonUserStore();
     public partial class EditarTecnicoPage : UserControl
     {
+        private readonly JsonUserStore _userStore = new JsonUserStore();
+        private TecnicoInfo? _tecnicoAtual;
+
         public EditarTecnicoPage()
         {
             InitializeComponent();
         }
 
-        private void CarregarButton_Click(object sender, RoutedEventArgs e)
+        // Botão que BUSCA o técnico (pode ser por CPF ou usuário – adaptei para CPF)
+        private void BuscarButton_Click(object sender, RoutedEventArgs e)
         {
-            var cpf = BuscaCpfTextBox.Text.Trim();
+            var cpf = CpfTextBox.Text.Trim();
+
             if (string.IsNullOrWhiteSpace(cpf))
             {
                 MessageBox.Show("Informe o CPF para buscar o técnico.",
@@ -24,85 +27,69 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 return;
             }
 
-            var tecnico = UsuarioStorage.GetTecnicoPorCpf(cpf);
-            if (tecnico == null)
+            _tecnicoAtual = UsuarioStorage.ObterTecnicoPorCpf(cpf);
+            if (_tecnicoAtual == null)
             {
                 MessageBox.Show("Técnico não encontrado.",
-                    "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    "Atenção", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            // Preenche campos
-            CpfTextBox.Text         = tecnico.Cpf;
-            NomeTextBox.Text        = tecnico.NomeCompleto;
-            TelefoneTextBox.Text    = tecnico.Telefone;
-            UserNameTextBox.Text    = tecnico.NomeUsuario;
-            SenhaPasswordBox.Password = tecnico.SenhaPrimeiroAcesso;
-            EmailTextBox.Text       = tecnico.Email;
-            CategoriaTextBox.Text   = tecnico.CategoriaChamados;
-
-            // Seleciona nível
-            NivelComboBox.SelectedIndex = -1;
-            for (int i = 0; i < NivelComboBox.Items.Count; i++)
-            {
-                if (NivelComboBox.Items[i] is ComboBoxItem item &&
-                    (item.Content?.ToString() ?? "") == tecnico.NivelTecnico)
-                {
-                    NivelComboBox.SelectedIndex = i;
-                    break;
-                }
-            }
+            // Preenche os campos com os dados encontrados
+            NomeTextBox.Text        = _tecnicoAtual.NomeCompleto;
+            TelefoneTextBox.Text    = _tecnicoAtual.Telefone;
+            NivelComboBox.Text      = _tecnicoAtual.NivelTecnico;
+            NomeUsuarioTextBox.Text = _tecnicoAtual.NomeUsuario;
+            EmailTextBox.Text       = _tecnicoAtual.Email;
+            CategoriaComboBox.Text  = _tecnicoAtual.CategoriaChamados;
+            SenhaPasswordBox.Password = _tecnicoAtual.SenhaPrimeiroAcesso;
         }
 
+        // Botão que SALVA as alterações
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(CpfTextBox.Text))
+            if (_tecnicoAtual == null)
             {
-                MessageBox.Show("CPF não pode ficar vazio.",
-                    "Campos obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Nenhum técnico carregado para edição.",
+                    "Atenção", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var nivel = (NivelComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "1";
+            // 1) Atualiza o técnico no tecnicos.json
+            _tecnicoAtual.NomeCompleto        = NomeTextBox.Text.Trim();
+            _tecnicoAtual.Telefone            = TelefoneTextBox.Text.Trim();
+            _tecnicoAtual.NivelTecnico        = NivelComboBox.Text;
+            _tecnicoAtual.NomeUsuario         = NomeUsuarioTextBox.Text.Trim();
+            _tecnicoAtual.Email               = EmailTextBox.Text.Trim();
+            _tecnicoAtual.CategoriaChamados   = CategoriaComboBox.Text;
+            _tecnicoAtual.SenhaPrimeiroAcesso = SenhaPasswordBox.Password;
 
-            var tecnico = new TecnicoInfo
+            UsuarioStorage.SalvarOuAtualizarTecnico(_tecnicoAtual);
+
+            // 2) Sincroniza com usuarios.json
+            var usuario = _userStore.GetByUsername(_tecnicoAtual.NomeUsuario);
+            if (usuario != null)
             {
-                Cpf                 = CpfTextBox.Text.Trim(),
-                NomeCompleto        = NomeTextBox.Text.Trim(),
-                Telefone            = TelefoneTextBox.Text.Trim(),
-                NomeUsuario         = UserNameTextBox.Text.Trim(),
-                SenhaPrimeiroAcesso = SenhaPasswordBox.Password,
-                Email               = EmailTextBox.Text.Trim(),
-                CategoriaChamados   = CategoriaTextBox.Text.Trim(),
-                NivelTecnico        = nivel
-            };
+                usuario.NomeCompleto = _tecnicoAtual.NomeCompleto;
+                usuario.Nivel        = $"Nível {_tecnicoAtual.NivelTecnico}";
+                usuario.Categoria    = _tecnicoAtual.CategoriaChamados;
 
-            UsuarioStorage.AddOrUpdateTecnico(tecnico);
+                if (!string.IsNullOrWhiteSpace(_tecnicoAtual.SenhaPrimeiroAcesso))
+                {
+                    usuario.PasswordHash = JsonUserStore.HashPassword(
+                        _tecnicoAtual.SenhaPrimeiroAcesso);
+                }
 
-            // depois de salvar o tecnico alterado
-var usuario = _userStore.GetByUsername(tecnico.NomeUsuario);
-if (usuario != null)
-{
-    usuario.NomeCompleto = tecnico.NomeCompleto;
-    usuario.Nivel        = $"Nível {tecnico.NivelTecnico}";
-    usuario.Categoria    = tecnico.CategoriaChamados;
-    // se quiser permitir trocar senha aqui:
-    if (!string.IsNullOrWhiteSpace(tecnico.SenhaPrimeiroAcesso))
-        usuario.PasswordHash = JsonUserStore.HashPassword(tecnico.SenhaPrimeiroAcesso);
+                _userStore.Update(usuario);
+            }
 
-    _userStore.Update(usuario);
-}
-
-            MessageBox.Show("Dados do técnico atualizados com sucesso!",
-                "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Técnico atualizado com sucesso!", "Sucesso",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
-    
+
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Window.GetWindow(this) is MainWindow main)
-            {
-                main.MainContentFrame.Navigate(new UsuariosPage());
-            }
+            // aqui você pode limpar os campos ou navegar para outra página
         }
     }
 }

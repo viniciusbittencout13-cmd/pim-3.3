@@ -37,14 +37,18 @@ namespace GLLRV.DesktopApp.Services
 
             var usuarioPadrao = new Usuario
             {
-                Username      = "vinicius",
-                NomeCompleto  = "Vinicius Bittencourt",
-                Nivel         = "Nível 2",
-                Categoria     = "Servidores / Rede",
-                PasswordHash  = HashPassword("admin"),  // senha inicial
+                Username       = "vinicius",
+                NomeCompleto   = "Vinicius Bittencourt",
+                // se o Nivel no model for string, isso aqui tá ok
+                // se for int, troque para Nivel = 2;
+                Nivel          = "Nível 2",
+                Categoria      = "Servidores / Rede",
+                PasswordHash   = HashPassword("admin"),  // senha inicial
                 PrimeiroAcesso = true,
                 Ativo          = true,
-                FraseSeguranca = "primeiro acesso"
+                FraseSeguranca = "primeiro acesso",
+                // se o seu model tiver Tipo, pode usar:
+                // Tipo = "Tecnico"
             };
 
             usuarios.Add(usuarioPadrao);
@@ -52,22 +56,9 @@ namespace GLLRV.DesktopApp.Services
         }
 
         // =========================
-        // LOGIN
+        // USADO PELO Auth
         // =========================
-        public Usuario? ValidarLogin(string username, string senha)
-        {
-            var usuarios = LoadAllInternal();
-            var senhaHash = HashPassword(senha);
 
-            return usuarios.FirstOrDefault(u =>
-                u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                u.PasswordHash == senhaHash &&
-                u.Ativo);
-        }
-
-        // =========================
-        // CONSULTA / UPDATE
-        // =========================
         public Usuario? GetByUsername(string username)
         {
             return LoadAllInternal()
@@ -94,6 +85,7 @@ namespace GLLRV.DesktopApp.Services
                 existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
                 existing.Ativo          = usuario.Ativo;
                 existing.FraseSeguranca = usuario.FraseSeguranca;
+                // se tiver mais campos no model, atualiza aqui também
             }
 
             SaveAllInternal(usuarios);
@@ -123,7 +115,7 @@ namespace GLLRV.DesktopApp.Services
         }
 
         // =========================
-        // HASH DE SENHA
+        // HASH DE SENHA (usado pelo Auth)
         // =========================
         public static string HashPassword(string password)
         {

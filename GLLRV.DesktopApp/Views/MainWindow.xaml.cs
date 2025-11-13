@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using GLLRV.DesktopApp.Views.Pages;
+using GLLRV.DesktopApp.Views.Pages.Relatorios;
 using GLLRV.DesktopApp.Models; // se quiser preencher infos do usuário
 
 namespace GLLRV.DesktopApp.Views

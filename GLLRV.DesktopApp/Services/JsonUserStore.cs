@@ -2,92 +2,129 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Services
 {
-    public static class JsonUserStore
+    public class JsonUserStore
     {
-        private static readonly string BaseDir =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
+        private readonly string _filePath;
 
-        private static readonly string UsersFile =
-            Path.Combine(BaseDir, "usuarios.json");
-
-        private static readonly JsonSerializerOptions JsonOptions = new()
+        public JsonUserStore()
         {
-            WriteIndented = true
-        };
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            var dataDir = Path.Combine(baseDir, "data");
+            if (!Directory.Exists(dataDir))
+                Directory.CreateDirectory(dataDir);
 
-        static JsonUserStore()
+            _filePath = Path.Combine(dataDir, "usuarios.json");
+        }
+
+        // =======================
+        // SEED: cria usuário padrão
+        // =======================
+        public static void EnsureSeedUser()
         {
-            if (!Directory.Exists(BaseDir))
-                Directory.CreateDirectory(BaseDir);
+            var store = new JsonUserStore();
+            var usuarios = store.LoadAllInternal();
 
-            if (!File.Exists(UsersFile))
+            if (usuarios.Any())
+                return;
+
+            var usuarioPadrao = new Usuario
             {
-                // SEED: cria um técnico nível 2 e um cliente
-                var seed = new List<Usuario>
-                {
-                    new()
-                    {
-                        Id = 1,
-                        NomeCompleto = "Vinicius Técnico",
-                        Username = "vinicius",
-                        Tipo = "Tecnico",
-                        Nivel = 2,
-                        Categoria = "Servidores / Rede",
-                        PasswordHash = "1234",         // por enquanto simples
-                        FraseSeguranca = "primeiro acesso"
-                    },
-                    new()
-                    {
-                        Id = 2,
-                        NomeCompleto = "Cliente Teste",
-                        Username = "cliente",
-                        Tipo = "Cliente",
-                        Nivel = 0,
-                        Categoria = "Usuário Final",
-                        PasswordHash = "1234",
-                        FraseSeguranca = "primeiro acesso"
-                    }
-                };
+                Username = "vinicius",
+                NomeCompleto = "Vinicius Bittencourt",
+                // se o seu Nivel for string, ok; se for int, mude para 2
+                Nivel = "Nível 2",
+                Categoria = "Servidores / Rede",
+                // IMPORTANTE: tipo de usuário para validar Nível 2 técnico
+                Tipo = "Tecnico",
+                PasswordHash = HashPassword("admin"),
+                PrimeiroAcesso = true,
+                Ativo = true,
+                FraseSeguranca = "primeiro acesso"
+            };
 
-                SaveUsuarios(seed);
-            }
+            usuarios.Add(usuarioPadrao);
+            store.SaveAllInternal(usuarios);
         }
 
-        public static List<Usuario> LoadUsuarios()
+        // =======================
+        // LOGIN
+        // =======================
+        public Usuario? ValidarLogin(string username, string senha)
         {
-            if (!File.Exists(UsersFile))
-                return new List<Usuario>();
-
-            var json = File.ReadAllText(UsersFile);
-            return JsonSerializer.Deserialize<List<Usuario>>(json, JsonOptions)
-                   ?? new List<Usuario>();
-        }
-
-        public static void SaveUsuarios(List<Usuario> usuarios)
-        {
-            if (!Directory.Exists(BaseDir))
-                Directory.CreateDirectory(BaseDir);
-
-            var json = JsonSerializer.Serialize(usuarios, JsonOptions);
-            File.WriteAllText(UsersFile, json);
-        }
-
-        /// <summary>
-        /// Valida login pelo username e senha.
-        /// Retorna o usuário ou null se não encontrar.
-        /// </summary>
-        public static Usuario? ValidarLogin(string username, string senha)
-        {
-            var usuarios = LoadUsuarios();
+            var usuarios = LoadAllInternal();
+            var senhaHash = HashPassword(senha);
 
             return usuarios.FirstOrDefault(u =>
                 u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)
-                && u.PasswordHash == senha);
+                && u.PasswordHash == senhaHash
+                && u.Ativo);
+        }
+
+        public Usuario? GetByUsername(string username)
+        {
+            return LoadAllInternal()
+                .FirstOrDefault(u =>
+                    u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void Update(Usuario usuario)
+        {
+            var usuarios = LoadAllInternal();
+            var existing = usuarios.FirstOrDefault(u =>
+                u.Username.Equals(usuario.Username, StringComparison.OrdinalIgnoreCase));
+
+            if (existing == null)
+            {
+                usuarios.Add(usuario);
+            }
+            else
+            {
+                existing.NomeCompleto = usuario.NomeCompleto;
+                existing.Nivel = usuario.Nivel;
+                existing.Categoria = usuario.Categoria;
+                existing.PasswordHash = usuario.PasswordHash;
+                existing.PrimeiroAcesso = usuario.PrimeiroAcesso;
+                existing.Ativo = usuario.Ativo;
+                existing.FraseSeguranca = usuario.FraseSeguranca;
+                existing.Tipo = usuario.Tipo;
+            }
+
+            SaveAllInternal(usuarios);
+        }
+
+        private List<Usuario> LoadAllInternal()
+        {
+            if (!File.Exists(_filePath))
+                return new List<Usuario>();
+
+            var json = File.ReadAllText(_filePath);
+            if (string.IsNullOrWhiteSpace(json))
+                return new List<Usuario>();
+
+            return JsonSerializer.Deserialize<List<Usuario>>(json)
+                   ?? new List<Usuario>();
+        }
+
+        private void SaveAllInternal(List<Usuario> usuarios)
+        {
+            var json = JsonSerializer.Serialize(usuarios,
+                new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, json);
+        }
+
+        public static string HashPassword(string password)
+        {
+            using var sha = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha.ComputeHash(bytes);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
     }
 }

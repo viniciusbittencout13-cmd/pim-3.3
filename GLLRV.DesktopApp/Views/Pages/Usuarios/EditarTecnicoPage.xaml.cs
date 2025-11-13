@@ -79,10 +79,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 
             UsuarioStorage.AddOrUpdateTecnico(tecnico);
 
-            MessageBox.Show("Dados do técnico atualizados com sucesso!",
-                "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        // depois de salvar o tecnico alterado
+            // depois de salvar o tecnico alterado
 var usuario = _userStore.GetByUsername(tecnico.NomeUsuario);
 if (usuario != null)
 {
@@ -96,6 +93,10 @@ if (usuario != null)
     _userStore.Update(usuario);
 }
 
+            MessageBox.Show("Dados do técnico atualizados com sucesso!",
+                "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
             if (Window.GetWindow(this) is MainWindow main)

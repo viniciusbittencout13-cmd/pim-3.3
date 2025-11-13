@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GLLRV.DesktopApp.Services;
 using GLLRV.DesktopApp.Views.Pages;
+using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {

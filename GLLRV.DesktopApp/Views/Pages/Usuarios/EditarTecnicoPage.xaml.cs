@@ -2,9 +2,11 @@ using System.Windows;
 using System.Windows.Controls;
 using GLLRV.DesktopApp.Services;
 using GLLRV.DesktopApp.Views.Pages;
+using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {
+    private readonly JsonUserStore _userStore = new JsonUserStore();
     public partial class EditarTecnicoPage : UserControl
     {
         public EditarTecnicoPage()
@@ -80,6 +82,19 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
             MessageBox.Show("Dados do técnico atualizados com sucesso!",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        // depois de salvar o tecnico alterado
+var usuario = _userStore.GetByUsername(tecnico.NomeUsuario);
+if (usuario != null)
+{
+    usuario.NomeCompleto = tecnico.NomeCompleto;
+    usuario.Nivel        = $"Nível {tecnico.NivelTecnico}";
+    usuario.Categoria    = tecnico.CategoriaChamados;
+    // se quiser permitir trocar senha aqui:
+    if (!string.IsNullOrWhiteSpace(tecnico.SenhaPrimeiroAcesso))
+        usuario.PasswordHash = JsonUserStore.HashPassword(tecnico.SenhaPrimeiroAcesso);
+
+    _userStore.Update(usuario);
+}
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {

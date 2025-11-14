@@ -25,6 +25,7 @@ namespace GLLRV.DesktopApp.Views
             if (_usuario != null)
             {
                 // Ajuste estes campos se quiser exibir outros dados
+                NomeUsuarioTextBlock.Text = _usuario.NomeCompleto;
                 UserLevelText.Text = $"Técnico - Nível {_usuario.Nivel}";
                 UserCategoryText.Text = _usuario.Categoria ?? "Categoria";
             }
@@ -40,7 +41,20 @@ namespace GLLRV.DesktopApp.Views
         }
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
-            => MainContentFrame.Navigate(new UsuariosPage());
+{
+    if (!_usuarioLogado.Nivel.Equals("Nível 2", StringComparison.OrdinalIgnoreCase))
+    {
+        MessageBox.Show(
+            "Apenas técnicos de Nível 2 têm permissão para acessar esta área.",
+            "Acesso negado",
+            MessageBoxButton.OK,
+            MessageBoxImage.Warning);
+
+        return;
+    }
+
+    MainContentFrame.Navigate(new UsuariosPage());
+}
 
         public void RelatoriosButton_Click(object sender, RoutedEventArgs e)
             => MainContentFrame.Navigate(new RelatoriosPage());

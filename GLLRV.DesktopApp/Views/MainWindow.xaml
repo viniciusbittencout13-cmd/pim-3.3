@@ -36,7 +36,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,8,0,16">
                     <Ellipse Width="56" Height="56" Fill="#FF8A00"/>
                     <StackPanel Margin="12,0,0,0">
-                        <TextBlock Text="Usuário" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock x:Name="NomeUsuarioTextBlock" FontWeight="Bold" FontSize="16" Text="Usuário" />
                         <TextBlock x:Name="UserLevelText" Text="Técnico - Nível 1" Foreground="#BFD1FF" FontSize="12"/>
                         <TextBlock x:Name="UserCategoryText" Text="Categoria" Foreground="#BFD1FF" FontSize="12"/>
                     </StackPanel>

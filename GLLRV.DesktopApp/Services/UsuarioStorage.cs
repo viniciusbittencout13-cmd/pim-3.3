@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using GLLRV.DesktopApp.Models;
 
 namespace GLLRV.DesktopApp.Services
 {
     public static class UsuarioStorage
     {
-        // POCO usado para gravar/ler o arquivo tecnicos.json
+        // ---------- TÉCNICOS ----------
         public class TecnicoInfo
         {
             public string Cpf { get; set; } = string.Empty;
@@ -22,13 +21,24 @@ namespace GLLRV.DesktopApp.Services
             public string CategoriaChamados { get; set; } = string.Empty;
         }
 
+        // ---------- CLIENTES ----------
+        public class ClienteInfo
+        {
+            public string Cpf { get; set; } = string.Empty;
+            public string NomeCompleto { get; set; } = string.Empty;
+            public string Telefone { get; set; } = string.Empty;   // <- TEM TELEFONE
+            public string Funcao { get; set; } = string.Empty;
+            public string NomeUsuario { get; set; } = string.Empty;
+            public string SenhaPrimeiroAcesso { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+        }
+
         private static readonly string BaseDir =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
 
         private static readonly string TecnicosFile =
             Path.Combine(BaseDir, "tecnicos.json");
 
-        // novo arquivo para clientes
         private static readonly string ClientesFile =
             Path.Combine(BaseDir, "clientes.json");
 
@@ -37,7 +47,7 @@ namespace GLLRV.DesktopApp.Services
             WriteIndented = true
         };
 
-        // ================== TÉCNICOS ==================
+        // ---------- TÉCNICOS ----------
 
         private static List<TecnicoInfo> LoadTecnicos()
         {
@@ -100,7 +110,7 @@ namespace GLLRV.DesktopApp.Services
             SaveTecnicos(lista);
         }
 
-        // ================== CLIENTES ==================
+        // ---------- CLIENTES ----------
 
         private static List<ClienteInfo> LoadClientes()
         {
@@ -127,18 +137,16 @@ namespace GLLRV.DesktopApp.Services
             File.WriteAllText(ClientesFile, json);
         }
 
-        // usado na tela EditarClientePage
-        public static ClienteInfo? GetClientePorCpf(string cpf)
+        public static ClienteInfo? ObterClientePorCpf(string cpf)
         {
             if (string.IsNullOrWhiteSpace(cpf))
                 return null;
 
-            var todos = LoadClientes();
-            return todos.FirstOrDefault(c =>
+            var lista = LoadClientes();
+            return lista.FirstOrDefault(c =>
                 c.Cpf.Equals(cpf, StringComparison.OrdinalIgnoreCase));
         }
 
-        // usado em CadastroClientePage / EditarClientePage
         public static void AddOrUpdateCliente(ClienteInfo cliente)
         {
             if (cliente == null) return;
@@ -154,6 +162,7 @@ namespace GLLRV.DesktopApp.Services
             else
             {
                 existente.NomeCompleto        = cliente.NomeCompleto;
+                existente.Telefone            = cliente.Telefone;
                 existente.Funcao              = cliente.Funcao;
                 existente.NomeUsuario         = cliente.NomeUsuario;
                 existente.SenhaPrimeiroAcesso = cliente.SenhaPrimeiroAcesso;

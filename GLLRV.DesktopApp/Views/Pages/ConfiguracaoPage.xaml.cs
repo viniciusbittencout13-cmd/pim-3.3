@@ -3,16 +3,16 @@ using System.Windows.Controls;
 using GLLRV.DesktopApp.Models;
 using GLLRV.DesktopApp.Services;
 
-namespace GLLRV.DesktopApp.Views.Pages.Configuracoes
+namespace GLLRV.DesktopApp.Views.Pages.Configuracao
 {
     public partial class ConfiguracoesPage : UserControl
     {
         private readonly Usuario _usuario;
 
-        public ConfiguracoesPage(Usuario usuarioLogado)
+        public ConfiguracaoPage(Usuario usuario)
         {
             InitializeComponent();
-            _usuario = usuarioLogado;
+            _usuario = usuario;
 
             // Preenche os campos
             NomeUsuarioTextBox.Text = _usuario.NomeUsuario;

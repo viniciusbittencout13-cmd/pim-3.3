@@ -63,7 +63,7 @@
 
                 <!-- NOME DE USUÁRIO -->
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="NOME DE USUÁRIO" Margin="0,8,0,4"/>
-                <TextBox x:Name="NomeUsuarioTextBox"
+                <TextBox x:Name="NomeUsuarioCadastradoTextBox"
                          Grid.Row="5" Grid.Column="0" Margin="0,0,10,10" Height="30"/>
 
                 <!-- SENHA PRIMEIRO ACESSO -->

@@ -14,20 +14,20 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
-            // limpa todos os campos
-            CpfTextBox.Text                    = string.Empty;
-            NomeTextBox.Text                   = string.Empty;
-            TelefoneTextBox.Text               = string.Empty;
-            NomeUsuarioTextBox.Text            = string.Empty;
-            SenhaPasswordBox.Password          = string.Empty;
-            EmailTextBox.Text                  = string.Empty;
-            CategoriaTextBox.Text              = string.Empty;
+            CpfTextBox.Text         = string.Empty;
+            NomeTextBox.Text        = string.Empty;
+            TelefoneTextBox.Text    = string.Empty;
+            NomeUsuarioTextBox.Text = string.Empty;
+            SenhaPasswordBox.Password = string.Empty;
+            EmailTextBox.Text       = string.Empty;
+            CategoriaTextBox.Text   = string.Empty;
             NivelComboBox.SelectedIndex = -1;
         }
 
         private void CadastrarButton_Click(object sender, RoutedEventArgs e)
         {
-            var cpf = CpfTextBox.Text?.Trim() ?? string.Empty;
+            // CPF obrigatório
+            var cpf = (CpfTextBox.Text ?? string.Empty).Trim();
             if (string.IsNullOrWhiteSpace(cpf))
             {
                 MessageBox.Show("Informe o CPF do técnico.",
@@ -35,18 +35,22 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 return;
             }
 
-            var nivel = (NivelComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty;
+            // nível técnico
+            var nivelItem = NivelComboBox.SelectedItem as ComboBoxItem;
+            var nivel = nivelItem != null
+                ? (nivelItem.Content?.ToString() ?? string.Empty)
+                : string.Empty;
 
             var tecnico = new UsuarioStorage.TecnicoInfo
             {
-                Cpf                = cpf,
-                NomeCompleto       = NomeTextBox.Text?.Trim()                  ?? string.Empty,
-                Telefone           = TelefoneTextBox.Text?.Trim()              ?? string.Empty,
-                NivelTecnico       = nivel,
-                NomeUsuario        = NomeUsuarioTextBox.Text?.Trim().          ?? string.Empty,
-                SenhaPrimeiroAcesso = SenhaPasswordBox.Password                ?? string.Empty,
-                Email              = EmailTextBox.Text?.Trim()                 ?? string.Empty,
-                CategoriaChamados  = CategoriaTextBox.Text?.Trim()             ?? string.Empty
+                Cpf                 = cpf,
+                NomeCompleto        = (NomeTextBox.Text        ?? string.Empty).Trim(),
+                Telefone            = (TelefoneTextBox.Text    ?? string.Empty).Trim(),
+                NivelTecnico        = nivel,
+                NomeUsuario         = (NomeUsuarioTextBox.Text ?? string.Empty).Trim(),
+                SenhaPrimeiroAcesso = SenhaPasswordBox.Password ?? string.Empty,
+                Email               = (EmailTextBox.Text       ?? string.Empty).Trim(),
+                CategoriaChamados   = (CategoriaTextBox.Text   ?? string.Empty).Trim()
             };
 
             UsuarioStorage.SalvarOuAtualizarTecnico(tecnico);
@@ -54,7 +58,8 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
             MessageBox.Show("Técnico cadastrado com sucesso.",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            CancelarButton_Click(sender, e); // limpa depois de salvar
+            // limpa os campos depois de salvar
+            CancelarButton_Click(sender, e);
         }
     }
 }

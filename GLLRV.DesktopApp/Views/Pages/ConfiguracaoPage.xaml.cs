@@ -5,12 +5,12 @@ using GLLRV.DesktopApp.Services;
 
 namespace GLLRV.DesktopApp.Views.Pages.Configuracao
 {
-    public partial class ConfiguracoesPage : UserControl
+    public partial class ConfiguracaoPage:UserControl
     {
         private readonly Usuario _usuario;
 
         // CONSTRUTOR CORRETO
-        public ConfiguracoesPage(Usuario usuario)
+        public ConfiguracaoPage(Usuario usuario)
         {
             InitializeComponent();
             _usuario = usuario;

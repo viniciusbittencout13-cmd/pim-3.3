@@ -9,7 +9,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracao
     {
         private readonly Usuario _usuario;
 
-        public ConfiguracaoPage(Usuario usuario)
+        public void ConfiguracaoPage(Usuario usuario)
         {
             InitializeComponent();
             _usuario = usuario;

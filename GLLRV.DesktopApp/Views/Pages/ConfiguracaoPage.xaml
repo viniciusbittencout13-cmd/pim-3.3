@@ -1,4 +1,4 @@
-<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ConfiguracaoPage"
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.Configuracao.ConfiguracaoPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -20,21 +20,19 @@
                 Padding="30">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Nome usuário -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Telefone -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Email -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Senha antiga -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Nova senha -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Repetir senha -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Frase segurança -->
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- Botões -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- NOME DE USUÁRIO -->

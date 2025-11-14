@@ -7,6 +7,9 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {
     public partial class EditarClientePage : UserControl
     {
+        // <- PASSO 3: campo para guardar o cliente carregado
+        private UsuarioStorage.ClienteInfo? _clienteAtual;
+
         public EditarClientePage()
         {
             InitializeComponent();
@@ -22,7 +25,8 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 return;
             }
 
-            var cliente = UsuarioStorage.GetClientePorCpf(cpf);
+            // nome correto do método no UsuarioStorage: ObterClientePorCpf
+            var cliente = UsuarioStorage.ObterClientePorCpf(cpf);
             if (cliente == null)
             {
                 MessageBox.Show("Cliente não encontrado.",
@@ -30,13 +34,15 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 return;
             }
 
-            CpfTextBox.Text              = cliente.Cpf;
-            NomeTextBox.Text             = cliente.NomeCompleto;
-            TelefoneTextBox.Text         = cliente.Telefone;
-            FuncaoTextBox.Text           = cliente.Funcao;
-            UserNameTextBox.Text         = cliente.NomeUsuario;
-            SenhaPasswordBox.Password    = cliente.SenhaPrimeiroAcesso;
-            EmailTextBox.Text            = cliente.Email;
+            _clienteAtual = cliente; // guarda para usar no Salvar
+
+            CpfTextBox.Text           = cliente.Cpf;
+            NomeTextBox.Text          = cliente.NomeCompleto;
+            TelefoneTextBox.Text      = cliente.Telefone;
+            FuncaoTextBox.Text        = cliente.Funcao;
+            UserNameTextBox.Text      = cliente.NomeUsuario;
+            SenhaPasswordBox.Password = cliente.SenhaPrimeiroAcesso;
+            EmailTextBox.Text         = cliente.Email;
         }
 
         private void SalvarButton_Click(object sender, RoutedEventArgs e)
@@ -48,18 +54,19 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 return;
             }
 
-            var cliente = new ClienteInfo
-            {
-                Cpf                 = CpfTextBox.Text.Trim(),
-                NomeCompleto        = NomeTextBox.Text.Trim(),
-                Telefone            = TelefoneTextBox.Text.Trim(),
-                Funcao              = FuncaoTextBox.Text.Trim(),
-                NomeUsuario         = UserNameTextBox.Text.Trim(),
-                SenhaPrimeiroAcesso = SenhaPasswordBox.Password,
-                Email               = EmailTextBox.Text.Trim()
-            };
+            // se não tiver carregado ninguém, cria um novo
+            var cliente = _clienteAtual ?? new UsuarioStorage.ClienteInfo();
+
+            cliente.Cpf                 = CpfTextBox.Text.Trim();
+            cliente.NomeCompleto        = NomeTextBox.Text.Trim();
+            cliente.Telefone            = TelefoneTextBox.Text.Trim();
+            cliente.Funcao              = FuncaoTextBox.Text.Trim();
+            cliente.NomeUsuario         = UserNameTextBox.Text.Trim();
+            cliente.SenhaPrimeiroAcesso = SenhaPasswordBox.Password;
+            cliente.Email               = EmailTextBox.Text.Trim();
 
             UsuarioStorage.AddOrUpdateCliente(cliente);
+            _clienteAtual = cliente;
 
             MessageBox.Show("Dados do cliente atualizados com sucesso!",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);

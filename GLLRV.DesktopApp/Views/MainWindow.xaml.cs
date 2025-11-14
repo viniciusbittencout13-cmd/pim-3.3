@@ -70,7 +70,7 @@ namespace GLLRV.DesktopApp.Views
 
         // Faltava esse handler no seu build
         private void ConfiguracaoButton_Click(object sender, RoutedEventArgs e)
-            => MainContentFrame.Navigate(new ConfiguracaoPage(_usuario));
+            => MainContentFrame.Navigate(new ConfiguracoesPage(_usuario));
             
         private void SairButton_Click(object sender, RoutedEventArgs e)
             => Close();

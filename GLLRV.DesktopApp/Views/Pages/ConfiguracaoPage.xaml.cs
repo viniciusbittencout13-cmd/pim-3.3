@@ -9,7 +9,8 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracao
     {
         private readonly Usuario _usuario;
 
-        public void ConfiguracaoPage(Usuario usuario)
+        // CONSTRUTOR CORRETO
+        public ConfiguracoesPage(Usuario usuario)
         {
             InitializeComponent();
             _usuario = usuario;
@@ -22,27 +23,29 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracao
 
         private void CadastrarButton_Click(object sender, RoutedEventArgs e)
         {
-            // --- ATUALIZAÇÃO DA SENHA ---
+            // --- ATUALIZA SENHA ---
             if (!string.IsNullOrWhiteSpace(SenhaAntigaPasswordBox.Password))
             {
                 string hashAntigo = JsonUserStore.HashPassword(SenhaAntigaPasswordBox.Password);
 
                 if (hashAntigo != _usuario.PasswordHash)
                 {
-                    MessageBox.Show("Senha antiga incorreta.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Senha antiga incorreta.", "Erro",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 if (NovaSenhaPasswordBox.Password != RepitaSenhaPasswordBox.Password)
                 {
-                    MessageBox.Show("As senhas não coincidem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("As senhas não coincidem.", "Erro",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 _usuario.PasswordHash = JsonUserStore.HashPassword(NovaSenhaPasswordBox.Password);
             }
 
-            // --- ATUALIZAÇÃO DA FRASE DE SEGURANÇA ---
+            // --- ATUALIZA FRASE DE SEGURANÇA ---
             if (!string.IsNullOrWhiteSpace(FraseSegurancaTextBox.Text))
             {
                 _usuario.FraseSeguranca = JsonUserStore.HashPassword(FraseSegurancaTextBox.Text);
@@ -52,9 +55,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracao
             _usuario.Telefone = TelefoneTextBox.Text.Trim();
             _usuario.Email = EmailTextBox.Text.Trim();
 
-            // FOTO será feita depois
-
-            // --- SALVA AS ALTERAÇÕES ---
+            // --- SALVA ---
             var store = new JsonUserStore();
             store.Update(_usuario);
 

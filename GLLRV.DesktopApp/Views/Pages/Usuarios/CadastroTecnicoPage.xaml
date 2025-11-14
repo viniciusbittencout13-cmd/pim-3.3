@@ -40,7 +40,7 @@
 
                 <!-- NOME / TELEFONE -->
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="NOME E SOBRENOME" Margin="0,0,0,4"/>
-                <TextBox x:Name="NomeUsuarioTextBox"
+                <TextBox x:Name="NomeUsuarioCadastradoTextBox"
                          Grid.Row="1" Grid.Column="0" Margin="0,0,10,10" Height="30"/>
 
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="TELEFONE" Margin="10,0,0,4"/>

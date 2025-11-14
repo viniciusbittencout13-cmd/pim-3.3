@@ -30,5 +30,8 @@ namespace GLLRV.DesktopApp.Models
 
         // Mantido só pra compatibilidade com código antigo
         public string FraseSeguranca { get; set; }
+
+        public string FraseSegurancaHash { get; set; } = string.Empty;
+        public string FraseSegurancaSalt { get; set; } = string.Empty;
     }
 }

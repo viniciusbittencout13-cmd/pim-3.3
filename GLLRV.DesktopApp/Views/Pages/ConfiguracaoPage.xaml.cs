@@ -14,7 +14,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracoes
             InitializeComponent();
             _usuario = usuarioLogado;
 
-            // Preenche os campos com dados atuais
+            // Preenche os campos
             NomeUsuarioTextBox.Text = _usuario.NomeUsuario;
             TelefoneTextBox.Text = _usuario.Telefone;
             EmailTextBox.Text = _usuario.Email;
@@ -22,11 +22,12 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracoes
 
         private void CadastrarButton_Click(object sender, RoutedEventArgs e)
         {
-            // SENHA
+            // --- ATUALIZAÇÃO DA SENHA ---
             if (!string.IsNullOrWhiteSpace(SenhaAntigaPasswordBox.Password))
             {
-                // Verifica senha antiga
-                if (!PasswordHasher.Verify(SenhaAntigaPasswordBox.Password, _usuario.PasswordHash, _usuario.PasswordSalt))
+                string hashAntigo = JsonUserStore.HashPassword(SenhaAntigaPasswordBox.Password);
+
+                if (hashAntigo != _usuario.PasswordHash)
                 {
                     MessageBox.Show("Senha antiga incorreta.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -34,34 +35,28 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracoes
 
                 if (NovaSenhaPasswordBox.Password != RepitaSenhaPasswordBox.Password)
                 {
-                    MessageBox.Show("A nova senha não coincide nos dois campos.", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("As senhas não coincidem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                // Atualiza senha
-                PasswordHasher.CreateHash(NovaSenhaPasswordBox.Password, out string hash, out string salt);
-                _usuario.PasswordHash = hash;
-                _usuario.PasswordSalt = salt;
+                _usuario.PasswordHash = JsonUserStore.HashPassword(NovaSenhaPasswordBox.Password);
             }
 
-            // FRASE DE SEGURANÇA
+            // --- ATUALIZAÇÃO DA FRASE DE SEGURANÇA ---
             if (!string.IsNullOrWhiteSpace(FraseSegurancaTextBox.Text))
             {
-                PasswordHasher.CreateHash(FraseSegurancaTextBox.Text, out string hash, out string salt);
-                _usuario.FraseSegurancaHash = hash;
-                _usuario.FraseSegurancaSalt = salt;
+                _usuario.FraseSeguranca = JsonUserStore.HashPassword(FraseSegurancaTextBox.Text);
             }
 
-            // TELEFONE
+            // --- EMAIL E TELEFONE ---
             _usuario.Telefone = TelefoneTextBox.Text.Trim();
-
-            // EMAIL
             _usuario.Email = EmailTextBox.Text.Trim();
 
-            // Foto não implementada ainda
+            // FOTO será feita depois
 
-            // Salva o usuario modificado
-            UsuarioStorage.SalvarOuAtualizarTecnico(_usuario);
+            // --- SALVA AS ALTERAÇÕES ---
+            var store = new JsonUserStore();
+            store.Update(_usuario);
 
             MessageBox.Show("Configurações atualizadas com sucesso!",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -69,10 +64,8 @@ namespace GLLRV.DesktopApp.Views.Pages.Configuracoes
 
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Opcional: apenas limpa
             TelefoneTextBox.Text = _usuario.Telefone;
             EmailTextBox.Text = _usuario.Email;
-
             SenhaAntigaPasswordBox.Password = "";
             NovaSenhaPasswordBox.Password = "";
             RepitaSenhaPasswordBox.Password = "";

@@ -1,14 +1,84 @@
-<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ConfiguracoesPage"
+<UserControl x:Class="GLLRV.DesktopApp.Views.Pages.ConfiguracaoPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d">
-    <Grid>
-        <TextBlock Text="Configurações (em construção)"
-                   FontSize="16"
-                   Foreground="#222"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="CONFIGURAÇÕES"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <Border Grid.Row="1"
+                Background="#CCFFFFFF"
+                CornerRadius="24"
+                Padding="30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Nome usuário -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Telefone -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Email -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Senha antiga -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Nova senha -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Repetir senha -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Frase segurança -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- Botões -->
+                </Grid.RowDefinitions>
+
+                <!-- NOME DE USUÁRIO -->
+                <TextBlock Grid.Row="0" Text="NOME DE USUÁRIO" Margin="0,0,0,4"/>
+                <TextBox x:Name="NomeUsuarioTextBox" Grid.Row="1" Height="30"/>
+
+                <!-- TELEFONE -->
+                <TextBlock Grid.Row="2" Text="TELEFONE" Margin="0,8,0,4"/>
+                <TextBox x:Name="TelefoneTextBox" Grid.Row="3" Height="30"/>
+
+                <!-- EMAIL -->
+                <TextBlock Grid.Row="4" Text="EMAIL" Margin="0,8,0,4"/>
+                <TextBox x:Name="EmailTextBox" Grid.Row="5" Height="30"/>
+
+                <!-- SENHA ANTIGA -->
+                <TextBlock Grid.Row="6" Text="SENHA ANTIGA" Margin="0,8,0,4"/>
+                <PasswordBox x:Name="SenhaAntigaPasswordBox" Grid.Row="7" Height="30"/>
+
+                <!-- NOVA SENHA -->
+                <TextBlock Grid.Row="8" Text="NOVA SENHA" Margin="0,8,0,4"/>
+                <PasswordBox x:Name="NovaSenhaPasswordBox" Grid.Row="9" Height="30"/>
+
+                <!-- REPITA SENHA -->
+                <TextBlock Grid.Row="10" Text="REPITA A NOVA SENHA" Margin="0,8,0,4"/>
+                <PasswordBox x:Name="RepitaSenhaPasswordBox" Grid.Row="11" Height="30"/>
+
+                <!-- FRASE DE SEGURANÇA -->
+                <TextBlock Grid.Row="12" Text="FRASE DE SEGURANÇA" Margin="0,8,0,4"/>
+                <TextBox x:Name="FraseSegurancaTextBox" Grid.Row="13" Height="30"/>
+
+                <!-- BOTÕES -->
+                <StackPanel Grid.Row="14"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,0">
+                    <Button Content="CANCELAR"
+                            Width="120"
+                            Margin="0,0,10,0"
+                            Click="CancelarButton_Click"/>
+                    <Button Content="SALVAR"
+                            Width="140"
+                            Click="CadastrarButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

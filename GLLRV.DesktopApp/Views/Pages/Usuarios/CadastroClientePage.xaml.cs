@@ -17,7 +17,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
             NomeTextBox.Text         = string.Empty;
             TelefoneTextBox.Text     = string.Empty;
             FuncaoTextBox.Text       = string.Empty;
-            NomeUsuarioCadastroTextBox.Text = string.Empty;
+            NomeUsuarioTextBox.Text = string.Empty;
             SenhaPasswordBox.Password = string.Empty;
             EmailTextBox.Text        = string.Empty;
         }
@@ -38,7 +38,7 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
                 NomeCompleto       = NomeTextBox.Text?.Trim()              ?? string.Empty,
                 Telefone           = TelefoneTextBox.Text?.Trim()          ?? string.Empty,
                 Funcao             = FuncaoTextBox.Text?.Trim()            ?? string.Empty,
-                NomeUsuario        = NomeUsuarioCadastroTextBox.Text?.Trim() ?? string.Empty,
+                NomeUsuario        = NomeUsuarioTextBox.Text?.Trim()       ?? string.Empty,
                 SenhaPrimeiroAcesso = SenhaPasswordBox.Password            ?? string.Empty,
                 Email              = EmailTextBox.Text?.Trim()             ?? string.Empty
             };

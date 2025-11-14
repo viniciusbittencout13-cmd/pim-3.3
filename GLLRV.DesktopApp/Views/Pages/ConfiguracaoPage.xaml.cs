@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using GLLRV.DesktopApp.Models;
 using GLLRV.DesktopApp.Services;
 
-namespace GLLRV.DesktopApp.Views.Pages.Configuracao
+namespace GLLRV.DesktopApp.Views.Pages
 {
     public partial class ConfiguracaoPage : UserControl
     {

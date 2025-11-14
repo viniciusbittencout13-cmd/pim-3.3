@@ -42,7 +42,7 @@ namespace GLLRV.DesktopApp.Views
 
         private void UsuariosButton_Click(object sender, RoutedEventArgs e)
 {
-    if (!_usuarioLogado.Nivel.Equals("Nível 2", StringComparison.OrdinalIgnoreCase))
+    if (_usuario == null || !_usuario.Nivel.Equals("Nível 2", StringComparison.OrdinalIgnoreCase))
     {
         MessageBox.Show(
             "Apenas técnicos de Nível 2 têm permissão para acessar esta área.",

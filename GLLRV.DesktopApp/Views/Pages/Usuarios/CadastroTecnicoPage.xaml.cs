@@ -15,13 +15,13 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
         private void CancelarButton_Click(object sender, RoutedEventArgs e)
         {
             // limpa todos os campos
-            CpfTextBox.Text            = string.Empty;
-            NomeTextBox.Text           = string.Empty;
-            TelefoneTextBox.Text       = string.Empty;
-            NomeUsuarioTextBox.Text    = string.Empty;
-            SenhaPasswordBox.Password  = string.Empty;
-            EmailTextBox.Text          = string.Empty;
-            CategoriaTextBox.Text      = string.Empty;
+            CpfTextBox.Text                    = string.Empty;
+            NomeTextBox.Text                   = string.Empty;
+            TelefoneTextBox.Text               = string.Empty;
+            NomeUsuarioCadastroTextBox.Text    = string.Empty;
+            SenhaPasswordBox.Password          = string.Empty;
+            EmailTextBox.Text                  = string.Empty;
+            CategoriaTextBox.Text              = string.Empty;
             NivelComboBox.SelectedIndex = -1;
         }
 
@@ -40,13 +40,13 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
             var tecnico = new UsuarioStorage.TecnicoInfo
             {
                 Cpf                = cpf,
-                NomeCompleto       = NomeTextBox.Text?.Trim()        ?? string.Empty,
-                Telefone           = TelefoneTextBox.Text?.Trim()    ?? string.Empty,
+                NomeCompleto       = NomeTextBox.Text?.Trim()                  ?? string.Empty,
+                Telefone           = TelefoneTextBox.Text?.Trim()              ?? string.Empty,
                 NivelTecnico       = nivel,
-                NomeUsuario        = NomeUsuarioTextBox.Text?.Trim() ?? string.Empty,
-                SenhaPrimeiroAcesso = SenhaPasswordBox.Password      ?? string.Empty,
-                Email              = EmailTextBox.Text?.Trim()       ?? string.Empty,
-                CategoriaChamados  = CategoriaTextBox.Text?.Trim()   ?? string.Empty
+                NomeUsuario        = NomeUsuarioCadastradoTextBox.Text?.Trim() ?? string.Empty,
+                SenhaPrimeiroAcesso = SenhaPasswordBox.Password                ?? string.Empty,
+                Email              = EmailTextBox.Text?.Trim()                 ?? string.Empty,
+                CategoriaChamados  = CategoriaTextBox.Text?.Trim()             ?? string.Empty
             };
 
             UsuarioStorage.SalvarOuAtualizarTecnico(tecnico);

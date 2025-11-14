@@ -28,8 +28,8 @@ namespace GLLRV.DesktopApp.Models
         // Se pode logar
         public bool Ativo { get; set; }
 
-        // Mantido só pra compatibilidade com código antigo
-        public string FraseSeguranca { get; set; }
+        public string Telefone { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         public string FraseSegurancaHash { get; set; } = string.Empty;
         public string FraseSegurancaSalt { get; set; } = string.Empty;

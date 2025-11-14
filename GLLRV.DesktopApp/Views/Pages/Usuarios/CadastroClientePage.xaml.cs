@@ -1,7 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using GLLRV.DesktopApp.Services;
-using GLLRV.DesktopApp.Views.Pages;
 
 namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 {
@@ -12,52 +11,44 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
             InitializeComponent();
         }
 
+        private void CancelarButton_Click(object sender, RoutedEventArgs e)
+        {
+            CpfTextBox.Text          = string.Empty;
+            NomeTextBox.Text         = string.Empty;
+            TelefoneTextBox.Text     = string.Empty;
+            FuncaoTextBox.Text       = string.Empty;
+            NomeUsuarioCadastroTextBox.Text = string.Empty;
+            SenhaPasswordBox.Password = string.Empty;
+            EmailTextBox.Text        = string.Empty;
+        }
+
         private void CadastrarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(NomeTextBox.Text) ||
-                string.IsNullOrWhiteSpace(CpfTextBox.Text))
+            var cpf = CpfTextBox.Text?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(cpf))
             {
-                MessageBox.Show("Preencha pelo menos Nome e CPF.",
-                    "Campos obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Informe o CPF do cliente.",
+                    "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var cliente = new ClienteInfo
+            var cliente = new UsuarioStorage.ClienteInfo
             {
-                NomeCompleto        = NomeTextBox.Text.Trim(),
-                Cpf                 = CpfTextBox.Text.Trim(),
-                Telefone            = TelefoneTextBox.Text.Trim(),
-                Funcao              = FuncaoTextBox.Text.Trim(),
-                NomeUsuario         = UserNameTextBox.Text.Trim(),
-                SenhaPrimeiroAcesso = SenhaPasswordBox.Password,
-                Email               = EmailTextBox.Text.Trim()
+                Cpf                = cpf,
+                NomeCompleto       = NomeTextBox.Text?.Trim()              ?? string.Empty,
+                Telefone           = TelefoneTextBox.Text?.Trim()          ?? string.Empty,
+                Funcao             = FuncaoTextBox.Text?.Trim()            ?? string.Empty,
+                NomeUsuario        = NomeUsuarioCadastroTextBox.Text?.Trim() ?? string.Empty,
+                SenhaPrimeiroAcesso = SenhaPasswordBox.Password            ?? string.Empty,
+                Email              = EmailTextBox.Text?.Trim()             ?? string.Empty
             };
 
             UsuarioStorage.AddOrUpdateCliente(cliente);
 
-            MessageBox.Show("Cliente cadastrado com sucesso!",
+            MessageBox.Show("Cliente cadastrado com sucesso.",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            LimparCampos();
-        }
-
-        private void LimparCampos()
-        {
-            NomeTextBox.Text = "";
-            TelefoneTextBox.Text = "";
-            CpfTextBox.Text = "";
-            FuncaoTextBox.Text = "";
-            UserNameTextBox.Text = "";
-            SenhaPasswordBox.Password = "";
-            EmailTextBox.Text = "";
-        }
-
-        private void CancelarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (Window.GetWindow(this) is MainWindow main)
-            {
-                main.MainContentFrame.Navigate(new UsuariosPage());
-            }
+            CancelarButton_Click(sender, e);
         }
     }
 }

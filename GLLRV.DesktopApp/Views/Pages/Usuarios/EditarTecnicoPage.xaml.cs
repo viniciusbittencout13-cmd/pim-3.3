@@ -80,6 +80,35 @@ namespace GLLRV.DesktopApp.Views.Pages.Usuarios
 
             UsuarioStorage.SalvarOuAtualizarTecnico(tecnico);
 
+            // Sincroniza também com o usuário de login
+            var store = new JsonUserStore();
+
+           // tenta achar o usuário pelo NomeUsuario
+           var usuario = store.GetByUsername(tecnico.NomeUsuario);
+           if (usuario == null)
+            {
+               usuario = new Usuario
+               {
+                  Username    = tecnico.NomeUsuario,
+                  NomeUsuario = tecnico.NomeUsuario
+               };
+            }
+
+            usuario.NomeCompleto = tecnico.NomeCompleto;
+            usuario.Nivel        = $"Nível {tecnico.NivelTecnico}";
+            usuario.Categoria    = tecnico.CategoriaChamados;
+            usuario.Ativo        = true;
+
+            // se o campo de senha de primeiro acesso foi preenchido,
+            // atualiza a senha de login e marca como primeiro acesso.
+            if (!string.IsNullOrWhiteSpace(tecnico.SenhaPrimeiroAcesso))
+            {
+              usuario.PasswordHash  = JsonUserStore.HashPassword(tecnico.SenhaPrimeiroAcesso);
+              usuario.PrimeiroAcesso = true;  // vai obrigar a trocar no próximo login
+            }
+
+            store.Update(usuario);
+
             MessageBox.Show("Dados do técnico salvos com sucesso.",
                 "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
         }
